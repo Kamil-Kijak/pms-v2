@@ -1,6 +1,10 @@
 
 
 const Owner = require("../models/Owner");
+const Town = require("../models/Town");
+const LandPurpose = require("../models/LandPurpose");
+const Location = require("../models/Location");
+const Land = require("../models/Land");
 
 exports.getOwners = async (req, res) => {
     const {nameFilter, limit} = req.query;
@@ -8,7 +12,7 @@ exports.getOwners = async (req, res) => {
         include:{
             model:Land,
             as:"lands",
-            attributes:["serialNumber", "landNumber", "area"],
+            attributes:["id", "serialNumber", "landNumber", "area"],
             include:[
                 {
                     model:Town,
@@ -35,7 +39,7 @@ exports.getOwners = async (req, res) => {
         },
         ...(limit && {limit:Number(limit)})
     })
-    res.status(200).json({success:true, message:"pobrano włascicieli i ich dzialki", owners})
+    res.status(200).json({success:true, message:"Pobrano włascicieli i ich dzialki", owners})
 }
 
 exports.insertOwner = async (req, res) => {
