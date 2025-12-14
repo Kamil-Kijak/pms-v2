@@ -21,6 +21,7 @@ const main = async () => {
     const generalPlans = require("./routes/generalPlans");
     const landTypes = require("./routes/landTypes");
     const landPurposes = require("./routes/landPurposes");
+    const files = require("./routes/files");
 
     const app = express();
     // midlewares
@@ -46,6 +47,7 @@ const main = async () => {
     app.use("/api/land-purposes", landPurposes);
     app.use("/api/mpzp", mpzp);
     app.use("/api/general-plans", generalPlans);
+    app.use("/api/files", files);
     
 
     sequelize.sync({force:false});
