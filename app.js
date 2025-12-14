@@ -17,6 +17,10 @@ const main = async () => {
     const sequelize = require("./util/db");
 
     const users = require("./routes/users");
+    const mpzp = require("./routes/mpzp");
+    const generalPlans = require("./routes/generalPlans");
+    const landTypes = require("./routes/landTypes");
+    const landPurposes = require("./routes/landPurposes");
 
     const app = express();
     // midlewares
@@ -38,6 +42,10 @@ const main = async () => {
     // routes
 
     app.use("/api/users", users);
+    app.use("/api/land-types", landTypes);
+    app.use("/api/land-purposes", landPurposes);
+    app.use("/api/mpzp", mpzp);
+    app.use("/api/general-plans", generalPlans);
     
 
     sequelize.sync({force:false});
