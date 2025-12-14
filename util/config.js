@@ -11,5 +11,6 @@ module.exports = {
     accessTokenKey:process.env.ACCESS_TOKEN_KEY || "K1BjP6-xTEAS8uKoq1vNm",
     saltOrRounds:Number(process.env.SALT_OR_ROUNDS) || 12,
     landFilesFolder:process.env.LAND_FILES_FOLDER || "landFiles",
-    fileMaxSize:process.env.FILE_MAX_SIZE ? Number(process.env.FILE_MAX_SIZE) : (10 * 1024 * 1024)
+    fileMaxSize:process.env.FILE_MAX_SIZE ? Number(process.env.FILE_MAX_SIZE) : (10 * 1024 * 1024),
+    requestsPerMinute:process.env.REQUESTS_PER_MINUTE ? Number(process.env.REQUESTS_PER_MINUTE) : 1000
 };

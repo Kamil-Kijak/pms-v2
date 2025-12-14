@@ -6,6 +6,7 @@ const path = require("path");
 const express = require("express");
 const rateLimit = require("express-rate-limit");
 const cookieParser = require("cookie-parser");
+const cors = require("cors");
 
 
 const createDatabase = require("./util/createDatabase");
@@ -17,9 +18,13 @@ const main = async () => {
 
     const app = express();
     // midlewares
+    app.use(cors({
+      origin:"localhost:5173",
+      methods:["GET", "POST", "PUT", "DELETE"],
+    }));
     const limiter = rateLimit({
-      windowMs: 1 * 60 * 1000,
-      max: 200,
+      windowMs: 60 * 1000,
+      max: config.requestsPerMinute,
     });
     app.use(limiter);
     app.use(express.json());
