@@ -18,8 +18,9 @@ const GroundClass = require("../models/GroundClass");
 const { Op} = require("sequelize");
 const path = require("path");
 const config = require("../util/config");
+const withErrorHandling = require("../middlewares/withErrorHandling")
 
-exports.getSerialExist = async (req, res) => {
+exports.getSerialExist = withErrorHandling(async (req, res) => {
     const {serialNumber} = req.query;
     const exist = await Land.count({
         where:{
@@ -27,9 +28,9 @@ exports.getSerialExist = async (req, res) => {
         }
     })
     res.status(200).json({success:true, message:"Pobrano pomyślnie", exist})
-}
+});
 
-exports.getLand = async (req, res) => {
+exports.getLand = withErrorHandling(async (req, res) => {
     const {idLand} = req.query;
     const land = Land.findByPk(idLand, {
         attributes:["id", "serialNumber", "landNumber", "propertyTax", "area", "registerNumber", "mortgage", "description", "waterCompany"],
@@ -87,11 +88,10 @@ exports.getLand = async (req, res) => {
             },
         ]
     })
-    res.status(200).json({success:true, message:`pobrano działkę o ID ${idLand}`, land})
-    
-}
+    res.status(200).json({success:true, message:`pobrano działkę o ID ${idLand}`, land})  
+});
 
-exports.getRentLands = async (req, res) => {
+exports.getRentLands = withErrorHandling(async (req, res) => {
     const {purpose} = req.body;
     const lands = await Land.findAll({
         attributes:["serialNumber", "landNumber", "area"],
@@ -123,9 +123,9 @@ exports.getRentLands = async (req, res) => {
         ]
     });
     res.status(200).json({success:true, message:"Pobrano działki przeznaczone do dzierżawy", lands});
-}
+});
 
-exports.getLandInsertionRequiredData = async (req, res) => {
+exports.getLandInsertionRequiredData = withErrorHandling(async (req, res) => {
     const owners = await Owner.findAll({order:[["name", "ASC"]]});
     const landTypes = await LandType.findAll();
     const landPurposes = await LandPurpose.findAll();
@@ -138,8 +138,9 @@ exports.getLandInsertionRequiredData = async (req, res) => {
         generalPlans,
         mpzp
     }});
-}
-exports.getLands = async (req, res) => {
+});
+
+exports.getLands = withErrorHandling(async (req, res) => {
     const {serialFilter, purchaseYearFilter, lowSellDateFilter, highSellDateFilter, ownerFilter, purposeFilter, rentFilter, lowAreaFilter,
          highAreaFilter, communeFilter, districtFilter, provinceFilter, townFilter, landNumberFilter, groundClassFilter, limit} = req.query;
 
@@ -284,9 +285,9 @@ exports.getLands = async (req, res) => {
         lands[index]["files"] = files
     });
     res.status(200).json({success:true, message:"Pobrano działki", lands});
-}
+});
 
-exports.insertLand = async (req, res) => {
+exports.insertLand = withErrorHandling(async (req, res) => {
     const {serialNumber, landNumber, area, town, commune, district, province, idOwner, registerNumber, mortgage, idLandType, description, idLandPurpose,
          idMpzp, idGeneralPlan, waterCompany, purchaseDate, purchaseActNumber, seller, purchasePrice, sellDate, sellActNumber, buyer, sellPrice, propertyTax} = req.body;
     let idTown;
@@ -363,9 +364,9 @@ exports.insertLand = async (req, res) => {
         seller:seller || null
     });
     res.status(201).json({success:true, message:"Dodano działkę"})
-}
+});
 
-exports.updateLand = async (req, res) => {
+exports.updateLand = withErrorHandling(async (req, res) => {
     const {idLand, serialNumber, landNumber, area, town, commune, district, province, idOwner, registerNumber, mortgage, idLandType, description, idLandPurpose,
          idMpzp, idGeneralPlan, waterCompany, purchaseDate, purchaseActNumber, seller, purchasePrice, sellDate, sellActNumber, buyer, sellPrice, propertyTax} = req.body;
     let idTown;
@@ -440,10 +441,10 @@ exports.updateLand = async (req, res) => {
         propertyTax
     }, {where:{id:idLand}})
     res.status(200).json({success:true, message:"Zaktualizowano działkę"})
-}
+});
 
-exports.deleteLand = async (req, res) => {
+exports.deleteLand = withErrorHandling(async (req, res) => {
     const {idLand} = req.body;
     const deletedCount = await Land.destroy({where:{id:idLand}})
     res.status(200).json({success:true, message:"Usunięto pomyślnie", deletedCount})
-}
+});

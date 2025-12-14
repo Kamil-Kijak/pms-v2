@@ -3,19 +3,20 @@ const fs = require("fs");
 const path = require("path");
 
 const LandType = require("../models/LandType");
+const withErrorHandling = require("../middlewares/withErrorHandling");
 
-exports.getAllLandTypes = async (req, res) => {
+exports.getAllLandTypes = withErrorHandling(async (req, res) => {
     const landTypes = await LandType.findAll();
     res.status(200).json({success:true, message:"Pobrano typy działek", landTypes})
-}
+});
 
-exports.insertLandType = async (req, res) => {
+exports.insertLandType = withErrorHandling(async (req, res) => {
     const {type} = req.body;
     await LandType.create({type});
     res.status(201).json({success:true, message:"Dodano typ działki"})
-}
+});
 
-exports.insertLandTypesFile = async (req, res) => {
+exports.insertLandTypesFile = withErrorHandling(async (req, res) => {
     const types = await LandType.findAll({attributes:["type"]});
     fs.readFile(path.join(__dirname, "..", "data", "landTypes.json"),
      "utf8", async (err, data) => {
@@ -28,16 +29,16 @@ exports.insertLandTypesFile = async (req, res) => {
         };
         res.status(201).json({success:true, message:"Wstawiono typy działek"})
     });
-}
+});
 
-exports.updateLandType = async (req, res) => {
+exports.updateLandType = withErrorHandling(async (req, res) => {
     const {idLandType, type} = req.body;
     const [affectedRows] = await LandType.update({type}, {where:{id:idLandType}})
     res.status(200).json({success:true, message:"Typ działki zaktulizowany", affectedRows})
-}
+});
 
-exports.deleteLandType = async (req, res) => {
+exports.deleteLandType = withErrorHandling(async (req, res) => {
     const {idLandType} = req.body;
     const deletedCount = await LandType.destroy({where:{id:idLandType}});
     res.status(200).json({success:true, message:"Usunięto typ działki", deletedCount})
-}
+});

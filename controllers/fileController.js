@@ -2,6 +2,7 @@
 const fs = require("fs");
 const path = require("path");
 const config = require("../util/config");
+const withErrorHandling = require("../middlewares/withErrorHandling");
 
 const folderPath = path.join(__dirname, "..", config.landFilesFolder);
 
@@ -36,7 +37,7 @@ const upload = multer({
 
 exports.upload = upload;
 
-exports.getFile = async (req, res) => {
+exports.getFile = withErrorHandling(async (req, res) => {
     const {idLand, filename} = req.params;
     const folder = path.join(folderPath, idLand);
     fs.readdir(folder, (err, files) => {
@@ -50,18 +51,18 @@ exports.getFile = async (req, res) => {
             return res.status(404).json({error:"pliku nie znaleziono"})
         }
     });
-}
+})
 
-exports.confirmUpload = async (req, res) => {
+exports.confirmUpload = withErrorHandling(async (req, res) => {
     if(req.files) {
         res.status(200).json({success:true, message:"Pliki zostały poprawnie wgrane", files:req.files})
     } else {
         res.status(400).json({success:false, message:"Pliki zostały odrzucony"})
     }
-}
+});
 
-exports.deleteFile = async (req, res) => {
+exports.deleteFile = withErrorHandling(async (req, res) => {
     const {idLand, filename} = req.body;
     fs.unlinkSync(path.join(folderPath, String(idLand), filename));
     res.status(200).json({success:true, message:"Pomyślnie usunięto plik"})
-}
+});

@@ -6,8 +6,9 @@ const Owner = require("../models/Owner");
 const Town = require("../models/Town");
 const Location = require("../models/Location");
 const {Op} = require("sequelize");
+const withErrorhandling = require("../middlewares/withErrorHandling");
 
-exports.getRenters = async (req, res) => {
+exports.getRenters = withErrorhandling(async (req, res) => {
     const {monthFilter, nameFilter, endYearFilter, ownerNameFilter, limit, showExpired} = req.query;
     const renters = await Renter.findAll({
         subQuery:false,
@@ -73,27 +74,27 @@ exports.getRenters = async (req, res) => {
     });
     
     res.status(200).json({success:true, message:"pobrano dzierżawców i ich dzierżawy", renters})
-}
+});
 
-exports.getAllRenters = async (req, res) => {
+exports.getAllRenters = withErrorhandling(async (req, res) => {
     const renters = await Renter.findAll({order:[["name", "ASC"]]})
     res.status(200).json({success:true, message:"pobrano dane dzierżawców", renters});
-}
+});
 
-exports.insertRenter = async (req, res) => {
+exports.insertRenter = withErrorhandling(async (req, res) => {
     const {name, phone} = req.body;
     const renter = await Renter.create({name, phone});
     res.status(201).json({success:true, message:"dodano dzierżawce", idRenter:renter.id});
-}
+});
 
-exports.updateRenter = async (req, res) => {
+exports.updateRenter = withErrorhandling(async (req, res) => {
     const {idRenter, name, phone} = req.body;
     const [affectedRows] = await Renter.update({name, phone}, {where:{id:idRenter}})
     res.status(200).json({success:true, message:"zaktualizowano dzierżawce", affectedRows});
-}
+});
 
-exports.deleteRenter = async (req, res) => {
+exports.deleteRenter = withErrorhandling(async (req, res) => {
     const {idRenter} = req.body;
     const deletedCount = await Renter.destroy({where:{id:idRenter}});
     res.status(200).json({success:true, message:"usunięto dzierżawcę", deletedCount});
-}
+});

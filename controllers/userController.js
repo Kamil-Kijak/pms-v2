@@ -3,8 +3,9 @@ const bcrypt = require("bcrypt");
 
 const User = require("../models/User");
 const config = require("../util/config");
+const withErrorHandling = require("../middlewares/withErrorHandling");
 
-exports.getAllUsers = async (req, res) => {
+exports.getAllUsers = withErrorHandling(async (req, res) => {
     const users = await User.findAll({
         attributes:["id", "name", "surname", "role"],
         order:[
@@ -12,9 +13,9 @@ exports.getAllUsers = async (req, res) => {
         ]
     });
     res.status(200).json({success:true, message:"Pobrano użytkowników", users});
-}
+});
 
-exports.registerAdmin = async (req, res) => {
+exports.registerAdmin = withErrorHandling(async (req, res) => {
     const {name, surname, password} = req.body;
     const adminExist = await User.count({
         where:{
@@ -33,9 +34,9 @@ exports.registerAdmin = async (req, res) => {
     } else {
         res.status(406).json({error:"Konto Admin już istnieje"})
     }
-}
+});
 
-exports.loginUser = async (req, res) => {
+exports.loginUser = withErrorHandling(async (req, res) => {
     const {idUser, password} = req.body;
     const userExist = await User.count({where:{id:idUser}});
     if(userExist == 0) {
@@ -61,36 +62,36 @@ exports.loginUser = async (req, res) => {
             res.status(400).json({error:"Złe hasło"})
         }
     }
-}
+});
 
-exports.logoutUser = async (req, res) => {
+exports.logoutUser = withErrorHandling(async (req, res) => {
     res.clearCookie("ACCESS_TOKEN")
     res.clearCookie("REFRESH_TOKEN")
     res.status(200).json({success:true, message:"Wylogowano"})
-}
+});
 
-exports.updateUser = async (req, res) => {
+exports.updateUser = withErrorHandling(async (req, res) => {
     const {idUser, name, surname, role} = req.body
     const [affectedRows] = await User.update({name, surname, role}, {where:{id:idUser}})
     res.status(200).json({success:true, message:"Użytkownik zaktualizowany", affectedRows});
-}
+});
 
-exports.updateUserPassword = async (req, res) => {
+exports.updateUserPassword = withErrorHandling(async (req, res) => {
     const {idUser, password} = req.body;
     const passwordHash = await bcrypt.hash(password, config.saltOrRounds);
     const [affectedRows] = await User.update({passwordHash}, {where:{id:idUser}})
     res.status(200).json({success:true, message:"Hasło zaktualizowane", affectedRows});
-}
+});
 
-exports.insertUser = async (req, res) => {
+exports.insertUser = withErrorHandling(async (req, res) => {
     const {name, surname, password, role} = req.body
     const passwordHash = await bcrypt.hash(password, config.saltOrRounds);
     await User.create({name, surname, passwordHash, role});
     res.status(201).json({success:true, message:"Dodano użytkownika"});
-}
+})
 
-exports.deleteUser = async (req, res) => {
+exports.deleteUser = withErrorHandling(async (req, res) => {
     const {idUser} = req.body;
     const deletedRows = await User.destroy({where:{id:idUser}})
     res.status(200).json({success:true, message:"Usunięto użytkowika", deletedRows});
-}
+});

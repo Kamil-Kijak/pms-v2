@@ -2,9 +2,10 @@
 
 const Town = require("../models/Town");
 const Location = require("../models/Location");
+const withErrorHandling = require("../middlewares/withErrorHandling");
 const {Op} = require("sequelize");
 
-exports.getTowns = async (req, res) => {
+exports.getTowns = withErrorHandling(async (req, res) => {
     const {town} = req.query;
     const towns = await Town.findAll({
         attributes:["id", "name"],
@@ -21,11 +22,10 @@ exports.getTowns = async (req, res) => {
         order:[["name", "ASC"]]
     });
     res.status(200).json({success:true, message:"Pobrano miejscowości", towns})
-}
+});
 
-exports.getLocations = async (req, res) => {
+exports.getLocations = withErrorHandling(async (req, res) => {
     const {taxDistrict, agriculturalTax, forestTax, commune, district, province, limit} = req.query
-
     const locations = await Location.findAll({
         where:{
             province:{
@@ -45,10 +45,10 @@ exports.getLocations = async (req, res) => {
         ...(limit && {limit:Number(limit)})
     });
     res.status(200).json({success:true, message:"Pobrano lokalizacje", locations})
-}
+});
 
-exports.updateLocation = async (req, res) => {
+exports.updateLocation = withErrorHandling(async (req, res) => {
     const {idLocation, taxDistrict, agriculturalTax, forestTax} = req.body;
     const [affectedRows] = await Location.update({taxDistrict, agriculturalTax, forestTax}, {where:{id:idLocation}});
     res.status(200).json({success:true, message:"Zaktualizowano lokalizacje", affectedRows})
-}
+});
