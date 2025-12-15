@@ -8,8 +8,8 @@ const rateLimit = require("express-rate-limit");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
 
-
 const createDatabase = require("./util/createDatabase");
+const createReport = require("./util/reportCreation");
 
 
 const main = async () => {
