@@ -3,6 +3,7 @@ const fs = require("fs");
 const path = require("path");
 const config = require("../util/config");
 const withErrorHandling = require("../middlewares/withErrorHandling");
+const multer = require("multer");
 
 const folderPath = path.join(__dirname, "..", config.landFilesFolder);
 

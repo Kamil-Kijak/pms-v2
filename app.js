@@ -16,6 +16,20 @@ const main = async () => {
     await createDatabase();
     const sequelize = require("./util/db");
 
+    const users = require("./routes/users");
+    const mpzp = require("./routes/mpzp");
+    const generalPlans = require("./routes/generalPlans");
+    const landTypes = require("./routes/landTypes");
+    const landPurposes = require("./routes/landPurposes");
+    const files = require("./routes/files");
+    const owners = require("./routes/owners");
+    const renters = require("./routes/renters");
+    const rents = require("./routes/rents");
+    const locations = require("./routes/locations");
+    const lands = require("./routes/lands");
+    const groundClasses = require("./routes/groundClasses");
+    const areas = require("./routes/areas");
+
     const app = express();
     // midlewares
     app.use(cors({
@@ -34,6 +48,20 @@ const main = async () => {
     }
 
     // routes
+
+    app.use("/api/users", users);
+    app.use("/api/land-types", landTypes);
+    app.use("/api/land-purposes", landPurposes);
+    app.use("/api/mpzp", mpzp);
+    app.use("/api/general-plans", generalPlans);
+    app.use("/api/files", files);
+    app.use("/api/renters", renters);
+    app.use("/api/owners", owners);
+    app.use("/api/rents", rents);
+    app.use("/api/locations", locations);
+    app.use("/api/lands", lands);
+    app.use("/api/ground-classes", groundClasses);
+    app.use("/api/areas", areas);
     
 
     sequelize.sync({force:false});
