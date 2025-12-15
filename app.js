@@ -9,7 +9,7 @@ const cookieParser = require("cookie-parser");
 const cors = require("cors");
 
 const createDatabase = require("./util/createDatabase");
-const createReport = require("./util/reportCreation");
+const createBackup = require("./util/createBackup")
 
 
 const main = async () => {
@@ -65,7 +65,7 @@ const main = async () => {
     
 
     sequelize.sync({force:false});
-
+    createBackup();
 };
 
 main();

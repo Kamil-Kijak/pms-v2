@@ -17,5 +17,6 @@ module.exports = {
     mailPort:process.env.MAIL_PORT ? Number(process.env.MAIL_PORT) : 110,
     mailUser:process.env.MAIL_USER || "name.surname@domain.com",
     mailPassword:process.env.MAIL_PASSWORD || "123456",
-    mailAdmin:process.env.MAIL_ADMIN || "name.surname@domain.com"
+    mailAdmin:process.env.MAIL_ADMIN || "name.surname@domain.com",
+    backupDir:process.env.BACKUP_DIR || "./backups"
 };
