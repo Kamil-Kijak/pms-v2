@@ -24,6 +24,11 @@ const main = async () => {
     const files = require("./routes/files");
     const owners = require("./routes/owners");
     const renters = require("./routes/renters");
+    const rents = require("./routes/rents");
+    const locations = require("./routes/locations");
+    const lands = require("./routes/lands");
+    const groundClasses = require("./routes/groundClasses");
+    const areas = require("./routes/areas");
 
     const app = express();
     // midlewares
@@ -52,6 +57,11 @@ const main = async () => {
     app.use("/api/files", files);
     app.use("/api/renters", renters);
     app.use("/api/owners", owners);
+    app.use("/api/rents", rents);
+    app.use("/api/locations", locations);
+    app.use("/api/lands", lands);
+    app.use("/api/ground-classes", groundClasses);
+    app.use("/api/areas", areas);
     
 
     sequelize.sync({force:false});
