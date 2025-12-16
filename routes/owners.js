@@ -16,7 +16,7 @@ router.get("/get", [
 router.post("/insert",[
     body("name").trim().toUpperCase().
     exists({checkFalsy:true}).withMessage("name is required").
-    isLength({min:1, max:100}).withMessage("name must be less or equal 100"),
+    isLength({min:1, max:100}).withMessage("name must be less or equal 100 characters"),
     body("phone").trim().
     exists({checkFalsy:true}).withMessage("phone is required").
     isMobilePhone("pl-PL").withMessage("phone is not valid phone format")
@@ -26,7 +26,7 @@ router.put("/update",[
     body("idOwner").trim().exists({checkFalsy:true}).withMessage("idOwner is required"),
     body("name").trim().toUpperCase().
     exists({checkFalsy:true}).withMessage("name is required").
-    isLength({min:1, max:100}).withMessage("name must be less or equal 100"),
+    isLength({min:1, max:100}).withMessage("name must be less or equal 100 characters"),
     body("phone").trim().
     exists({checkFalsy:true}).withMessage("phone is required").
     isMobilePhone("pl-PL").withMessage("phone is not valid phone format")

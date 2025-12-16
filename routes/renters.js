@@ -12,7 +12,7 @@ router.get("/get", [
     query("monthFilter").trim().toInt(),
     query("nameFilter").trim(),
     query("endYearFilter").trim().optional().
-    isDate().withMessage("endYearFilter is not valid date format").toDate(),
+    isInt().withMessage("endYearFilter must be a number").toInt(),
     query("ownerNameFilter").trim(),
     query("limit").trim().optional().isInt({min:0}).withMessage("limit must be a number greater or equal 0").
     toInt(),
@@ -22,7 +22,7 @@ router.get("/get", [
 router.post("/insert",[
     body("name").trim().toUpperCase().
     exists({checkFalsy:true}).withMessage("name is required").
-    isLength({min:1, max:100}).withMessage("name must be less or equal 100"),
+    isLength({min:1, max:100}).withMessage("name must be less or equal 100 characters"),
     body("phone").trim().
     exists({checkFalsy:true}).withMessage("phone is required").
     isMobilePhone("pl-PL").withMessage("phone is not valid phone format")
@@ -33,7 +33,7 @@ router.put("/update", [
     exists({checkFalsy:true}).withMessage("idRenter is required"),
     body("name").trim().toUpperCase().
     exists({checkFalsy:true}).withMessage("name is required").
-    isLength({min:1, max:100}).withMessage("name must be less or equal 100"),
+    isLength({min:1, max:100}).withMessage("name must be less or equal 100 characters"),
     body("phone").trim().
     exists({checkFalsy:true}).withMessage("phone is required").
     isMobilePhone("pl-PL").withMessage("phone is not valid phone format")
