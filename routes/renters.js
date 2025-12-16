@@ -9,13 +9,17 @@ const { query, body } = require("express-validator");
 router.get("/get-all", renterController.getAllRenters);
 
 router.get("/get", [
-    query("monthFilter").trim().default(null).optional().isInt().withMessage("monthFilter must be a number").toInt(),
+    query("monthFilter").trim().default(null).optional({checkFalsy:true}).
+    isInt().withMessage("monthFilter must be a number").toInt(),
     query("nameFilter").trim(),
-    query("endYearFilter").trim().default(null).optional().isInt().withMessage("monthFilter must be a number").toInt(),
+    query("endYearFilter").trim().default(null).optional({checkFalsy:true}).
+    isInt().withMessage("monthFilter must be a number").toInt(),
     query("ownerNameFilter").trim().default(null),
-    query("limit").trim().optional().isInt({min:0}).withMessage("limit must be a number greater or equal 0").
+    query("limit").trim().optional({checkFalsy:true}).
+    isInt({min:0}).withMessage("limit must be a number greater or equal 0").
     toInt(),
-    query("showExpired").trim().default(null).optional().toBoolean()
+    query("showExpired").trim().default(null).optional({checkFalsy:true}).
+    toBoolean()
 ], renterController.getRenters);
 
 router.post("/insert",[
