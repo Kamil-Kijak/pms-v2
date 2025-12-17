@@ -9,12 +9,11 @@ const cookieParser = require("cookie-parser");
 const cors = require("cors");
 
 const createDatabase = require("./util/createDatabase");
-const createShedule = require("./util/createShedule");
-
 
 const main = async () => {
     await createDatabase();
     const sequelize = require("./util/db");
+    const createShedule = require("./util/createShedule");
 
     const users = require("./routes/users");
     const mpzp = require("./routes/mpzp");

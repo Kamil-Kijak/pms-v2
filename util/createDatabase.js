@@ -15,7 +15,7 @@ const createDatabase = async () => {
     await conn.ping();
     conn.release();
     const result = await pool.execute("SHOW DATABASES")
-    if (!result[0].every((obj) => obj["Database"] != config.dbName)) {
+    if (result[0].some((obj) => obj["Database"] == config.dbName)) {
       console.log("Creation of database skipped")
     } else {
       await pool.execute(`CREATE DATABASE IF NOT EXISTS ${config.dbName} CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;`)

@@ -1,24 +1,75 @@
 
 const express = require("express");
+const {body} = require("express-validator");
 
 const router = express.Router();
-
 const userController = require('../controllers/userController');
 
 router.get("/get-all", userController.getAllUsers);
 
-router.get("/", userController.logoutUser)
+router.get("/logout", userController.logoutUser)
 
-router.post("/register-admin", userController.registerAdmin);
+router.post("/register-admin",[
+    body("name").trim().toUpperCase().
+    exists({checkFalsy:true}).withMessage("name is required").
+    isLength({max:50}).withMessage("name must be less or equal than 50 characters"),
+    body("surname").trim().toUpperCase().
+    exists({checkFalsy:true}).withMessage("surname is required").
+    isLength({max:50}).withMessage("surname must be less or equal than 50 characters"),
+    body("password").
+    exists({checkFalsy:true}).withMessage("password is required").
+    isLength({min:8}).withMessage("password is too weak")
+], userController.registerAdmin);
 
-router.post("/login-user", userController.loginUser);
+router.post("/login-user",[
+    body("idUser").trim().
+    exists({checkFalsy:true}).withMessage("idUser is required"),
+    body("password").exists({checkFalsy:true}).withMessage("password is required")
+], userController.loginUser);
 
-router.post("/insert", userController.insertUser);
+router.post("/insert",[
+    body("name").trim().toUpperCase().
+    exists({checkFalsy:true}).withMessage("name is required").
+    isLength({max:50}).withMessage("name must be less or equal than 50 characters"),
+    body("surname").trim().toUpperCase().
+    exists({checkFalsy:true}).withMessage("surname is required").
+    isLength({max:50}).withMessage("surname must be less or equal than 50 characters"),
+    body("password").
+    exists({checkFalsy:true}).withMessage("password is required").
+    isLength({min:8}).withMessage("password is too weak"),
+    body("role").
+    exists({checkFalsy:true}).withMessage("role is required").
+    isWhitelisted(["ADMIN", "SEKRETARIAT", "KSIEGOWOSC", "TEREN"]).withMessage("Role is not whitelisted")
+], userController.insertUser);
 
-router.put("/update", userController.updateUser);
+router.put("/update", [
+    body("idUser").trim().
+    exists({checkFalsy:true}).withMessage("idUser is required"),
+    body("name").trim().toUpperCase().
+    exists({checkFalsy:true}).withMessage("name is required").
+    isLength({max:50}).withMessage("name must be less or equal than 50 characters"),
+    body("surname").trim().toUpperCase().
+    exists({checkFalsy:true}).withMessage("surname is required").
+    isLength({max:50}).withMessage("surname must be less or equal than 50 characters"),
+    body("password").
+    exists({checkFalsy:true}).withMessage("password is required").
+    isLength({min:8}).withMessage("password is too weak"),
+    body("role").
+    exists({checkFalsy:true}).withMessage("role is required").
+    isWhitelisted(["ADMIN", "SEKRETARIAT", "KSIEGOWOSC", "TEREN"]).withMessage("Role is not whitelisted")
+], userController.updateUser);
 
-router.put("/update-password", userController.updateUserPassword);
+router.put("/update-password", [
+    body("idUser").trim().
+    exists({checkFalsy:true}).withMessage("idUser is required"),
+    body("password").
+    exists({checkFalsy:true}).withMessage("Password is required").
+    isLength({min:8}).withMessage("Password is too weak")
+], userController.updateUserPassword);
 
-router.delete("/delete", userController.deleteUser);
+router.delete("/delete", [
+    body("idUser").trim().
+    exists({checkFalsy:true}).withMessage("idUser is required"),
+], userController.deleteUser);
 
 module.exports = router;

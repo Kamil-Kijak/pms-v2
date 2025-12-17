@@ -36,7 +36,7 @@ exports.getOwners = withErrorHandling(async (req, res) => {
         },
         where:{
             name:{
-                [Op.like]:`%${nameFilter}%`
+                [Op.like]:`%${nameFilter || ""}%`
             }
         },
         ...(limit && {limit:Number(limit)})
