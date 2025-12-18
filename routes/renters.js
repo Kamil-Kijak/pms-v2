@@ -25,6 +25,7 @@ router.get("/get", [
     isInt({min:0}).withMessage("limit must be a int value greater or equal 0").
     toInt(),
     query("showExpired").trim().default(null).optional({checkFalsy:true}).
+    isBoolean().withMessage("showExpired must be a boolean value").
     toBoolean()
 ], renterController.getRenters);
 
