@@ -1,1 +1,10 @@
 @import "tailwindcss";
+
+
+.primary-btn {
+    @apply font-bold bg-green-700 hover:bg-green-600 text-white p-2 rounded-xl cursor-pointer
+}
+
+.error-box {
+    @apply ml-1 text-lg text-red-800 bg-red-400 font-bold p-1 rounded-md mt-2 border-3 border-red-800
+}
