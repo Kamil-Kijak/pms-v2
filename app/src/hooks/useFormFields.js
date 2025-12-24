@@ -20,7 +20,7 @@ const useFormFields = (fields) => {
             const field = [...fields].find(field => field.name == obj);
             if(!fieldData[obj]) {
                 if(!field.allowNull) {
-                    setErrors((prev) => ({...prev, [obj]:"Pole jest puste"}))
+                    setErrors((prev) => ({...prev, [obj]:"Podaj dane"}))
                     return;
                 }
             } else {
@@ -47,7 +47,7 @@ const useFormFields = (fields) => {
             return false;
         }
     }
-    return [setFieldData, fieldData, errors, isValidated]
+    return [setFieldData, fieldData, errors, setErrors, isValidated]
 }
 
 export default useFormFields;

@@ -1,12 +1,23 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import MainLayout from "../layouts/MainLayout";
 import LoginUser from "../components/forms/user/LoginUser"
+import useApi from "../hooks/useApi";
+import ErrorBox from "../components/popups/ErrorBox";
+import RegisterAdmin from "../components/forms/user/RegisterAdmin";
 
-const MainPage = () => {
-    const [register, setRegister] = useState(false);
+const MainPage = ({authorize}) => {
+    const [registered, setRegistered] = useState(false);
+    const {get} = useApi();
+
+    useEffect(() => {
+        get("/api/users/get-all", (res) => setRegistered([...res.data.users].some((value) => value.role == "ADMIN")));
+    }, [])
     return (
         <MainLayout>
-            <LoginUser/>
+            <ErrorBox/>
+            {
+                registered ? <LoginUser authorize={authorize}/> : <RegisterAdmin authorize={authorize}/>
+            }
         </MainLayout>
     )
 }
