@@ -1,7 +1,43 @@
 
+import { BrowserRouter } from "react-router-dom";
+import Navbar from "../components/nav/Navbar"
+import { useUserStore } from "../hooks/stores";
+import useApi from "../hooks/useApi";
 
-const DashboardLayout = () => {
+const DashboardLayout = ({children, authorize}) => {
 
+    const user = useUserStore((state) => state.user);
+    const {get} = useApi();
+
+    const logout = () => {
+        get("/api/users/logout", (res) => authorize());
+    }
+
+    return (
+        <section className="flex flex-col h-screen">
+            <header className="bg-green-700 flex p-2 items-center gap-5">
+                <section className="p-1 bg-white rounded-xl">
+                    <img src="/PMS-V2.png" alt="PMS - logo" width={50}/>
+                </section>
+                <section className="flex justify-between w-full items-center">
+                    <section className="p-1 text-white font-bold text-2xl">
+                        <p>Zalogowano jako: <span className="font-extrabold">{user.name} {user.surname} {user.role}</span></p>
+                    </section>
+                    <section>
+                        <button className="secondary-btn text-2xl" onClick={logout}>Wyloguj się</button>
+                    </section>
+                </section>
+            </header>
+            <BrowserRouter>
+                <section className="flex w-full justify-between items-center h-full">
+                    <Navbar/>
+                    <main>
+                        {children}
+                    </main>
+                </section>
+            </BrowserRouter>
+        </section>
+    )
 }
 
 export default DashboardLayout;
