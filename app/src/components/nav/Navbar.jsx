@@ -31,7 +31,7 @@ const Navbar = () => {
                 </Navbutton>
 
                 <Navbutton roles={["ADMIN"]} path="/users">
-                    <FontAwesomeIcon icon={faUserTie}/> Użytkowicy
+                    <FontAwesomeIcon icon={faUserTie}/> Użytkownicy
                 </Navbutton>
                 <Navbutton roles={["ADMIN"]} path="/mpzp">
                     <FontAwesomeIcon icon={faCity}/> Mpzp
