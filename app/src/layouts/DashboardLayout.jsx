@@ -31,7 +31,7 @@ const DashboardLayout = ({children, authorize}) => {
             <BrowserRouter>
                 <section className="flex w-full justify-between items-center h-full">
                     <Navbar/>
-                    <main className="flex flex-col w-full h-full p-5">
+                    <main className="flex flex-col w-full h-full">
                         {children}
                     </main>
                 </section>

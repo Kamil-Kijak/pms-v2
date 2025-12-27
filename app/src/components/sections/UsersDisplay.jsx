@@ -1,13 +1,45 @@
 
+import { useEffect, useState } from "react";
 import Title from "../nav/Title"
+import useApi from "../../hooks/useApi"
+import User from "../models/User"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUser } from "@fortawesome/free-solid-svg-icons";
+import InsertUser from "../forms/user/InsertUser";
 
 const UsersDisplay = () => {
+    const {get} = useApi();
+    const [users, setUsers] = useState([]);
+    const [formName, setFormName] = useState(null);
+
+    const getUsers = () => {
+        get("/api/users/get-all", (res) => setUsers(res.data.users))
+    }
+
+    useEffect(() => {
+        getUsers()
+    }, []);
     return (
-        <>
+        <section className="flex justify-between h-full">
             <Title title={"PMS-v2 - Użytkownicy"}/>
-            <h1 className="text-3xl font-bold text-green-700">Użytkownicy. Znaleziono: 1</h1>
-        
-        </>
+            <section className="flex flex-col w-full p-5">
+                <section className="flex items-center gap-x-5">
+                    <h1 className="text-4xl font-bold">Użytkownicy</h1>
+                    <button className="primary-btn" onClick={() => setFormName("insert")}>
+                        <FontAwesomeIcon icon={faUser}/> Dodaj nowego użytkownika
+                    </button>
+                </section>
+                <h2 className="text-3xl font-bold ml-5 mt-2">Znaleziono: {users.length}</h2>
+                <section className="my-5">
+                    {
+                        users.map((obj, index) => <User data={obj} key={obj.id} number={index + 1}/>)
+                    }
+                </section>
+            </section>
+            {
+                formName == "insert" && <InsertUser onClose={() => setFormName(null)} reload={getUsers}/>
+            }
+        </section>
     )
 }
 
