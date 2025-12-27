@@ -3,6 +3,7 @@ import { BrowserRouter } from "react-router-dom";
 import Navbar from "../components/nav/Navbar"
 import { useUserStore } from "../hooks/stores";
 import useApi from "../hooks/useApi";
+import DeleteConfirm from "../components/popups/DeleteConfirm";
 
 const DashboardLayout = ({children, authorize}) => {
 
@@ -31,7 +32,8 @@ const DashboardLayout = ({children, authorize}) => {
             <BrowserRouter>
                 <section className="flex w-full justify-between items-center h-full">
                     <Navbar/>
-                    <main className="flex flex-col w-full h-full">
+                    <main className="flex flex-col w-full h-full relative">
+                        <DeleteConfirm/>
                         {children}
                     </main>
                 </section>

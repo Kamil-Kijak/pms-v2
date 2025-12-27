@@ -6,7 +6,7 @@ const DashboardPage = ({authorize}) => {
     return (
         <DashboardLayout authorize={authorize}>
             <Routes>
-                <Route path="/users" element={<UsersDisplay/>}/>
+                <Route path="/users" element={<UsersDisplay authorize={authorize}/>}/>
             </Routes>
         </DashboardLayout>
     )

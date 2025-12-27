@@ -12,4 +12,11 @@ const useErrorStore = create((set) => ({
     disable:() => set({error:null})
 }));
 
-export {useUserStore, useErrorStore}
+const useDeleteConfirmStore = create((set) => ({
+    active:false,
+    update:(active, onConfirm) => set({active, onConfirm}),
+    onConfirm:() => {},
+    onCancel:() => set({active:false})
+}))
+
+export {useUserStore, useErrorStore, useDeleteConfirmStore}

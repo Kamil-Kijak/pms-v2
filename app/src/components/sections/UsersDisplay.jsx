@@ -6,14 +6,24 @@ import User from "../models/User"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 import InsertUser from "../forms/user/InsertUser";
+import { useUserStore } from "../../hooks/stores";
 
-const UsersDisplay = () => {
-    const {get} = useApi();
+const UsersDisplay = ({authorize}) => {
+    const {get, deleteReq} = useApi();
+    const user = useUserStore((state) => state.user);
     const [users, setUsers] = useState([]);
     const [formName, setFormName] = useState(null);
 
+
     const getUsers = () => {
         get("/api/users/get-all", (res) => setUsers(res.data.users))
+    }
+
+    const handleDelete = async (id) => {
+        await deleteReq("/api/users/delete", {idUser:id}, (res) => setUsers((prev) => [...prev.filter((obj) => obj.id != id)]))
+        if(id == user.id) {
+            get("/api/users/logout", (res) => authorize());
+        }
     }
 
     useEffect(() => {
@@ -32,7 +42,12 @@ const UsersDisplay = () => {
                 <h2 className="text-3xl font-bold ml-5 mt-2">Znaleziono: {users.length}</h2>
                 <section className="my-5">
                     {
-                        users.map((obj, index) => <User data={obj} key={obj.id} number={index + 1}/>)
+                        users.map((obj, index) => <User
+                                                    data={obj}
+                                                    key={obj.id}
+                                                    number={index + 1}
+                                                    onDelete={handleDelete}
+                                                    />)
                     }
                 </section>
             </section>
