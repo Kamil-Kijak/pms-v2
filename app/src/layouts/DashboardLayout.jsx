@@ -16,7 +16,7 @@ const DashboardLayout = ({children}) => {
     }
 
     return (
-        <section className="flex flex-col h-screen">
+        <section className="flex flex-col h-screen overflow-y-hidden">
             <header className="bg-green-700 flex p-2 items-center gap-5">
                 <section className="p-1 bg-white rounded-xl">
                     <img src="/PMS-V2.png" alt="PMS - logo" width={50}/>
@@ -33,7 +33,7 @@ const DashboardLayout = ({children}) => {
             <BrowserRouter>
                 <section className="flex w-full justify-between items-center h-full">
                     <Navbar/>
-                    <main className="flex flex-col w-full h-full relative">
+                    <main className="flex flex-col w-full h-full relative overflow-y-auto">
                         <DeleteConfirm/>
                         {children}
                     </main>
