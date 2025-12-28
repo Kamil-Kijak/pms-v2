@@ -4,10 +4,12 @@ import Input from "../../inputs/Input"
 import useFormFields from "../../../hooks/useFormFields"
 import useApi from "../../../hooks/useApi"
 import ErrorBox from "../../popups/ErrorBox";
+import { useUserStore } from "../../../hooks/stores";
 
 
-const RegisterAdmin = ({authorize}) => {
+const RegisterAdmin = () => {
     const {post} = useApi();
+    const auth = useUserStore((state) => state.auth)
     const [setFieldData, fieldData, errors, setErrors, isValidated] = useFormFields([
         {
             name:"name",
@@ -26,6 +28,10 @@ const RegisterAdmin = ({authorize}) => {
             allowNull:false,
             regexp:/^.{8,}$/,
             errorText:"Za słabe"
+        },
+        {
+            name:"repeatedPassword",
+            allowNull:false
         }
     ]);
 
@@ -33,10 +39,14 @@ const RegisterAdmin = ({authorize}) => {
         e.preventDefault();
         let idUser;
         if(isValidated()) {
-            await post("/api/users/register-admin", fieldData, (res) => idUser = res.data.idUser, (err) => {
-                setErrors((prev) => ({...prev, name:err.error}))
-            });
-            post("/api/users/login-user", {idUser, password:fieldData.password}, (res) => authorize());
+            if(fieldData.password === fieldData.repeatedPassword) {
+                await post("/api/users/register-admin", fieldData, (res) => idUser = res.data.idUser, (err) => {
+                    setErrors((prev) => ({...prev, name:err.error}))
+                });
+                post("/api/users/login-user", {idUser, password:fieldData.password}, (res) => auth());
+            } else {
+                setErrors((prev) => ({...prev, repeatedPassword:"Hasła nie są takie same"}));
+            }
         }
         
     }
@@ -66,6 +76,14 @@ const RegisterAdmin = ({authorize}) => {
                     error={errors.password}
                     handleChange={(e) => setFieldData((prev) => ({...prev, password:e.target.value}))}
                     value={fieldData.password}
+                />
+                <Input
+                    type="password"
+                    placeholder="Powtórz hasło"
+                    title="Powtórz hasło"
+                    error={errors.repeatedPassword}
+                    handleChange={(e) => setFieldData((prev) => ({...prev, repeatedPassword:e.target.value}))}
+                    value={fieldData.repeatedPassword}
                 />
             </section>
             <section className="my-4">

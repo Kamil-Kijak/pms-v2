@@ -5,13 +5,14 @@ import { useUserStore } from "../hooks/stores";
 import useApi from "../hooks/useApi";
 import DeleteConfirm from "../components/popups/DeleteConfirm";
 
-const DashboardLayout = ({children, authorize}) => {
+const DashboardLayout = ({children}) => {
 
     const user = useUserStore((state) => state.user);
+    const auth = useUserStore((state) => state.auth)
     const {get} = useApi();
 
     const logout = () => {
-        get("/api/users/logout", (res) => authorize());
+        get("/api/users/logout", (res) => auth());
     }
 
     return (

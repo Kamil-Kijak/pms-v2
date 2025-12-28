@@ -10,9 +10,10 @@ import { useUserStore } from "../../hooks/stores";
 import UpdateUser from "../forms/user/UpdateUser";
 import UpdateUserPassword from "../forms/user/UpdateUserPassword";
 
-const UsersDisplay = ({authorize}) => {
+const UsersDisplay = () => {
     const {get, deleteReq} = useApi();
     const user = useUserStore((state) => state.user);
+    const auth = useUserStore((state) => state.auth)
     const [users, setUsers] = useState([]);
     const [formName, setFormName] = useState(null);
 
@@ -24,7 +25,7 @@ const UsersDisplay = ({authorize}) => {
     const handleDelete = async (id) => {
         await deleteReq("/api/users/delete", {idUser:id}, (res) => setUsers((prev) => [...prev.filter((obj) => obj.id != id)]))
         if(id == user.id) {
-            get("/api/users/logout", (res) => authorize());
+            get("/api/users/logout", (res) => auth());
         }
     }
 
