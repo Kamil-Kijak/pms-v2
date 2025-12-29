@@ -2,18 +2,23 @@
 import { useEffect, useState } from "react";
 import Title from "../nav/Title"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHouse } from "@fortawesome/free-solid-svg-icons";
+import { faFolderPlus, faPlus } from "@fortawesome/free-solid-svg-icons";
 import useApi from "../../hooks/useApi";
 import Mpzp from "../models/Mpzp";
 import InsertMpzp from "../forms/mpzp/InsertMpzp";
+import UpdateMpzp from "../forms/mpzp/UpdateMpzp";
 
 const MpzpDisplay = () => {
-    const {get, deleteReq} = useApi();
+    const {get, deleteReq, post} = useApi();
     const [formName, setFormName] = useState(null);
     const [mpzp, setMpzp] = useState([]);
 
     const getMpzp = () => {
         get("/api/mpzp/get-all", (res) => setMpzp(res.data.mpzp))
+    }
+
+    const insertFile = () => {
+        post("/api/mpzp/insert-file", {}, (res) => getMpzp())
     }
 
     const handleDelete = (id) => {
@@ -31,7 +36,10 @@ const MpzpDisplay = () => {
                 <section className="flex items-center gap-x-5">
                     <h1 className="text-4xl font-bold">MPZP</h1>
                     <button className="primary-btn" onClick={() => setFormName("insert")}>
-                        <FontAwesomeIcon icon={faHouse}/> Dodaj nowy MPZP
+                        <FontAwesomeIcon icon={faPlus}/> Dodaj nowy MPZP
+                    </button>
+                    <button className="primary-btn" onClick={insertFile}>
+                        <FontAwesomeIcon icon={faFolderPlus}/> Dodaj Zapisane MPZP
                     </button>
                 </section>
                 <h2 className="text-3xl font-bold ml-5 mt-2">Znaleziono: {mpzp.length}</h2>
@@ -48,10 +56,10 @@ const MpzpDisplay = () => {
                 </section>
             </section>
             {
-                formName == "insert" && <InsertMpzp onClose={() => setFormName(null)} reload={getMpzp}/>
+                formName == "insert" && <InsertMpzp onClose={() => setFormName(null)} reload={getMpzp} mpzp={mpzp}/>
             }
             {
-                formName == "update" && <UpdateUser onClose={() => setFormName(null)} reload={getMpzp}/>
+                formName == "update" && <UpdateMpzp onClose={() => setFormName(null)} reload={getMpzp} mpzp={mpzp}/>
             }
         </section>
     )

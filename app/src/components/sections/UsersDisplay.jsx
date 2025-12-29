@@ -4,7 +4,7 @@ import Title from "../nav/Title"
 import useApi from "../../hooks/useApi"
 import User from "../models/User"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser } from "@fortawesome/free-solid-svg-icons";
+import { faPlus} from "@fortawesome/free-solid-svg-icons";
 import InsertUser from "../forms/user/InsertUser";
 import { useUserStore } from "../../hooks/stores";
 import UpdateUser from "../forms/user/UpdateUser";
@@ -39,7 +39,7 @@ const UsersDisplay = () => {
                 <section className="flex items-center gap-x-5">
                     <h1 className="text-4xl font-bold">Użytkownicy</h1>
                     <button className="primary-btn" onClick={() => setFormName("insert")}>
-                        <FontAwesomeIcon icon={faUser}/> Dodaj nowego użytkownika
+                        <FontAwesomeIcon icon={faPlus}/> Dodaj nowego użytkownika
                     </button>
                 </section>
                 <h2 className="text-3xl font-bold ml-5 mt-2">Znaleziono: {users.length}</h2>
