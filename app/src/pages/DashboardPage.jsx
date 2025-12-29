@@ -2,6 +2,7 @@ import { Route, Routes } from "react-router-dom";
 import DashboardLayout from "../layouts/DashboardLayout";
 import UsersDisplay from "../components/sections/UsersDisplay";
 import MpzpDisplay from "../components/sections/MpzpDisplay";
+import GeneralPlansDisplay from "../components/sections/GeneralPlansDisplay";
 
 const DashboardPage = () => {
     return (
@@ -9,6 +10,7 @@ const DashboardPage = () => {
             <Routes>
                 <Route path="/users" element={<UsersDisplay/>}/>
                 <Route path="/mpzp" element={<MpzpDisplay/>}/>
+                <Route path="/general-plans" element={<GeneralPlansDisplay/>}/>
             </Routes>
         </DashboardLayout>
     )
