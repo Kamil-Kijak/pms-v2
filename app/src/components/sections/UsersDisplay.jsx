@@ -9,6 +9,7 @@ import InsertUser from "../forms/user/InsertUser";
 import { useUserStore } from "../../hooks/stores";
 import UpdateUser from "../forms/user/UpdateUser";
 import UpdateUserPassword from "../forms/user/UpdateUserPassword";
+import RoleRequired from "../nav/RoleRequired";
 
 const UsersDisplay = () => {
     const {get, deleteReq} = useApi();
@@ -33,39 +34,41 @@ const UsersDisplay = () => {
         getUsers()
     }, []);
     return (
-        <section className="flex justify-between h-full">
-            <Title title={"PMS-v2 - Użytkownicy"}/>
-            <section className="flex flex-col w-full p-5">
-                <section className="flex items-center gap-x-5">
-                    <h1 className="text-4xl font-bold">Użytkownicy</h1>
-                    <button className="primary-btn" onClick={() => setFormName("insert")}>
-                        <FontAwesomeIcon icon={faPlus}/> Dodaj nowego użytkownika
-                    </button>
+        <RoleRequired roles={["ADMIN"]}>
+            <section className="flex justify-between h-full">
+                <Title title={"PMS-v2 - Użytkownicy"}/>
+                <section className="flex flex-col w-full p-5">
+                    <section className="flex items-center gap-x-5">
+                        <h1 className="text-4xl font-bold">Użytkownicy</h1>
+                        <button className="primary-btn" onClick={() => setFormName("insert")}>
+                            <FontAwesomeIcon icon={faPlus}/> Dodaj nowego użytkownika
+                        </button>
+                    </section>
+                    <h2 className="text-3xl font-bold ml-5 mt-2">Znaleziono: {users.length}</h2>
+                    <section className="my-5">
+                        {
+                            users.map((obj, index) => <User
+                                                            data={obj}
+                                                            key={obj.id}
+                                                            number={index + 1}
+                                                            onDelete={handleDelete}
+                                                            onUpdate={() => setFormName("update")}
+                                                            onPaswordUpdate={() => setFormName("updatePassword")}
+                                                        />)
+                        }
+                    </section>
                 </section>
-                <h2 className="text-3xl font-bold ml-5 mt-2">Znaleziono: {users.length}</h2>
-                <section className="my-5">
-                    {
-                        users.map((obj, index) => <User
-                                                        data={obj}
-                                                        key={obj.id}
-                                                        number={index + 1}
-                                                        onDelete={handleDelete}
-                                                        onUpdate={() => setFormName("update")}
-                                                        onPaswordUpdate={() => setFormName("updatePassword")}
-                                                    />)
-                    }
-                </section>
+                {
+                    formName == "insert" && <InsertUser onClose={() => setFormName(null)} reload={getUsers}/>
+                }
+                {
+                    formName == "update" && <UpdateUser onClose={() => setFormName(null)} reload={getUsers}/>
+                }
+                {
+                    formName == "updatePassword" && <UpdateUserPassword onClose={() => setFormName(null)} reload={getUsers}/>
+                }
             </section>
-            {
-                formName == "insert" && <InsertUser onClose={() => setFormName(null)} reload={getUsers}/>
-            }
-            {
-                formName == "update" && <UpdateUser onClose={() => setFormName(null)} reload={getUsers}/>
-            }
-            {
-                formName == "updatePassword" && <UpdateUserPassword onClose={() => setFormName(null)} reload={getUsers}/>
-            }
-        </section>
+        </RoleRequired>
     )
 }
 

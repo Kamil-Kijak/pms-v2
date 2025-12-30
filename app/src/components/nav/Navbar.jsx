@@ -19,7 +19,6 @@ const Navbar = () => {
                 <Navbutton path="/rents">
                     <FontAwesomeIcon icon={faUsers}/> Dzierżawy i dzierżawcy
                 </Navbutton>
-
                 <Navbutton roles={["TEREN"]} path="/forms">
                     <FontAwesomeIcon icon={faFile}/> Formularze
                 </Navbutton>

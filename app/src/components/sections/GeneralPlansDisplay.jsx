@@ -7,6 +7,7 @@ import useApi from "../../hooks/useApi";
 import GeneralPlan from "../models/GeneralPlan";
 import InsertGeneralPlan from "../forms/generalPlan/InsertGeneralPlan";
 import UpdateGeneralPlan from "../forms/generalPlan/UpdateGeneralPlan";
+import RoleRequired from "../nav/RoleRequired"
 
 const GeneralPlansDisplay = () => {
     const {get, deleteReq, post} = useApi();
@@ -30,38 +31,40 @@ const GeneralPlansDisplay = () => {
     }, []);
 
     return (
-        <section className="flex justify-between h-full">
-            <Title title={"PMS-v2 - Plany ogólne"}/>
-            <section className="flex flex-col w-full p-5">
-                <section className="flex items-center gap-x-5">
-                    <h1 className="text-4xl font-bold">Plany ogólne</h1>
-                    <button className="primary-btn" onClick={() => setFormName("insert")}>
-                        <FontAwesomeIcon icon={faPlus}/> Dodaj nowy plan ogólny
-                    </button>
-                    <button className="primary-btn" onClick={insertFile}>
-                        <FontAwesomeIcon icon={faFolderPlus}/> Dodaj zapisane plany ogólne
-                    </button>
+        <RoleRequired roles={["ADMIN"]}>
+            <section className="flex justify-between h-full">
+                <Title title={"PMS-v2 - Plany ogólne"}/>
+                <section className="flex flex-col w-full p-5">
+                    <section className="flex items-center gap-x-5">
+                        <h1 className="text-4xl font-bold">Plany ogólne</h1>
+                        <button className="primary-btn" onClick={() => setFormName("insert")}>
+                            <FontAwesomeIcon icon={faPlus}/> Dodaj nowy plan ogólny
+                        </button>
+                        <button className="primary-btn" onClick={insertFile}>
+                            <FontAwesomeIcon icon={faFolderPlus}/> Dodaj zapisane plany ogólne
+                        </button>
+                    </section>
+                    <h2 className="text-3xl font-bold ml-5 mt-2">Znaleziono: {generalPlans.length}</h2>
+                    <section className="my-5">
+                        {
+                            generalPlans.map((obj, index) => <GeneralPlan
+                                                            data={obj}
+                                                            key={obj.id}
+                                                            number={index + 1}
+                                                            onDelete={handleDelete}
+                                                            onUpdate={() => setFormName("update")}
+                                                    />)
+                        }
+                    </section>
                 </section>
-                <h2 className="text-3xl font-bold ml-5 mt-2">Znaleziono: {generalPlans.length}</h2>
-                <section className="my-5">
-                    {
-                        generalPlans.map((obj, index) => <GeneralPlan
-                                                        data={obj}
-                                                        key={obj.id}
-                                                        number={index + 1}
-                                                        onDelete={handleDelete}
-                                                        onUpdate={() => setFormName("update")}
-                                                />)
-                    }
-                </section>
+                {
+                    formName == "insert" && <InsertGeneralPlan onClose={() => setFormName(null)} reload={getGeneralPlans} generalPlans={generalPlans}/>
+                }
+                {
+                    formName == "update" && <UpdateGeneralPlan onClose={() => setFormName(null)} reload={getGeneralPlans} mpzp={generalPlans}/>
+                }
             </section>
-            {
-                formName == "insert" && <InsertGeneralPlan onClose={() => setFormName(null)} reload={getGeneralPlans} generalPlans={generalPlans}/>
-            }
-            {
-                formName == "update" && <UpdateGeneralPlan onClose={() => setFormName(null)} reload={getGeneralPlans} mpzp={generalPlans}/>
-            }
-        </section>
+        </RoleRequired>
     )
 }
 

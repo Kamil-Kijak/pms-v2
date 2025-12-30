@@ -6,6 +6,7 @@ import { faFolderPlus, faPlus } from "@fortawesome/free-solid-svg-icons";
 import LandType from "../models/LandType";
 import InsertLandType from "../forms/landType/InsertLandType";
 import UpdateLandType from "../forms/landType/UpdateLandType";
+import RoleRequired from "../nav/RoleRequired";
 
 
 const LandTypesDisplay = () => {
@@ -30,38 +31,40 @@ const LandTypesDisplay = () => {
     }, []);
 
     return (
-        <section className="flex justify-between h-full">
-            <Title title={"PMS-v2 - Rodzaje działek"}/>
-            <section className="flex flex-col w-full p-5">
-                <section className="flex items-center gap-x-5">
-                    <h1 className="text-4xl font-bold">Rodzaje działek</h1>
-                    <button className="primary-btn" onClick={() => setFormName("insert")}>
-                        <FontAwesomeIcon icon={faPlus}/> Dodaj nowy rodzaj działki
-                    </button>
-                    <button className="primary-btn" onClick={insertFile}>
-                        <FontAwesomeIcon icon={faFolderPlus}/> Dodaj zapisane rodzaje działek
-                    </button>
+        <RoleRequired roles={["ADMIN"]}>
+            <section className="flex justify-between h-full">
+                <Title title={"PMS-v2 - Rodzaje działek"}/>
+                <section className="flex flex-col w-full p-5">
+                    <section className="flex items-center gap-x-5">
+                        <h1 className="text-4xl font-bold">Rodzaje działek</h1>
+                        <button className="primary-btn" onClick={() => setFormName("insert")}>
+                            <FontAwesomeIcon icon={faPlus}/> Dodaj nowy rodzaj działki
+                        </button>
+                        <button className="primary-btn" onClick={insertFile}>
+                            <FontAwesomeIcon icon={faFolderPlus}/> Dodaj zapisane rodzaje działek
+                        </button>
+                    </section>
+                    <h2 className="text-3xl font-bold ml-5 mt-2">Znaleziono: {landTypes.length}</h2>
+                    <section className="my-5">
+                        {
+                            landTypes.map((obj, index) => <LandType
+                                                            data={obj}
+                                                            key={obj.id}
+                                                            number={index + 1}
+                                                            onDelete={handleDelete}
+                                                            onUpdate={() => setFormName("update")}
+                                                    />)
+                        }
+                    </section>
                 </section>
-                <h2 className="text-3xl font-bold ml-5 mt-2">Znaleziono: {landTypes.length}</h2>
-                <section className="my-5">
-                    {
-                        landTypes.map((obj, index) => <LandType
-                                                        data={obj}
-                                                        key={obj.id}
-                                                        number={index + 1}
-                                                        onDelete={handleDelete}
-                                                        onUpdate={() => setFormName("update")}
-                                                />)
-                    }
-                </section>
+                {
+                    formName == "insert" && <InsertLandType onClose={() => setFormName(null)} reload={getLandTypes}/>
+                }
+                {
+                    formName == "update" && <UpdateLandType onClose={() => setFormName(null)} reload={getLandTypes}/>
+                }
             </section>
-            {
-                formName == "insert" && <InsertLandType onClose={() => setFormName(null)} reload={getLandTypes}/>
-            }
-            {
-                formName == "update" && <UpdateLandType onClose={() => setFormName(null)} reload={getLandTypes}/>
-            }
-        </section>
+        </RoleRequired>
     )
 }
 
