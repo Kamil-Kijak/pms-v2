@@ -1,8 +1,18 @@
 import { faCity, faFile, faHouse, faLocationDot, faMountainSun, faUsers, faUserTie } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Navbutton from "./Navbutton"
+import { useLocation } from "react-router-dom";
+import { useDeleteConfirmStore } from "../../hooks/stores";
+import { useEffect } from "react";
 
 const Navbar = () => {
+
+    const location = useLocation();
+    const onCancel = useDeleteConfirmStore((state) => state.onCancel);
+
+    useEffect(() => {
+        onCancel()
+    }, [location.pathname])
 
     return (
         <nav className="flex flex-col border-r-4 border-r-green-700 h-full w-50">

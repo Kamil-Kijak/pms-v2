@@ -37,7 +37,7 @@ const UsersDisplay = () => {
         <RoleRequired roles={["ADMIN"]}>
             <section className="flex justify-between h-full">
                 <Title title={"PMS-v2 - Użytkownicy"}/>
-                <section className="flex flex-col w-full p-5">
+                <section className="flex flex-col w-full p-5 overflow-y-auto">
                     <section className="flex justify-between">
                         <section className="flex items-center gap-x-5">
                             <h1 className="text-4xl font-bold">Użytkownicy</h1>

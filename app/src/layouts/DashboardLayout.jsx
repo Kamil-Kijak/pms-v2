@@ -33,7 +33,7 @@ const DashboardLayout = ({children}) => {
             <BrowserRouter>
                 <section className="flex w-full justify-between items-center flex-1 min-h-0">
                     <Navbar/>
-                    <main className="flex flex-col w-full h-full relative overflow-y-auto">
+                    <main className="flex flex-col w-full h-full relative">
                         <DeleteConfirm/>
                         {children}
                     </main>
