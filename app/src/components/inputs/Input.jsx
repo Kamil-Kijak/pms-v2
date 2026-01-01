@@ -1,7 +1,7 @@
 import { faWarning } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-const Input = ({type = "text", placeholder = "", title = <></>, handleChange, error = "", value}) => {
+const Input = ({type = "text", placeholder = "", title = <></>, handleChange, error = "", value, name=""}) => {
     return (
         <section className="w-full">
             <p className="font-bold mb-1 text-lg">{title}</p>
@@ -10,6 +10,7 @@ const Input = ({type = "text", placeholder = "", title = <></>, handleChange, er
                 autoComplete="off"
                 className="p-2 border-2 border-black rounded-md inline-block w-full"
                 onChange={handleChange} value={(value ?? "")}
+                name={name}
             />
             {error && <p className="error-box"><FontAwesomeIcon icon={faWarning}/> {error}</p>}
         </section>

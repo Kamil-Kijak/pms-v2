@@ -1,11 +1,30 @@
-import { faSearch, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { faBroom, faSearch, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useSearchParams } from "react-router-dom";
 
 
-const SearchBarLayout = ({onSubmit, onClose, children}) => {
+const SearchBarLayout = ({ onClose, children, isValidated = () => {}, onClear}) => {
+
+    const [searchParams, setSearchParams] = useSearchParams();
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        if(isValidated()) {
+            const formData = new FormData(e.currentTarget);
+            const params = {};
+            for (const [key, value] of formData.entries()) {
+                params[key] = value;
+            }
+            setSearchParams(params);
+        }
+    }
+
     return (
-        <form onSubmit={onSubmit} className="w-[33%] border-l-4 border-l-green-700 p-5 flex flex-col items-center scroll-auto">
-            <button className="error-btn m-2" onClick={onClose}><FontAwesomeIcon icon={faXmark}/> Zamknij</button>
+        <form onSubmit={handleSubmit} className="w-[33%] border-l-4 border-l-green-700 p-5 flex flex-col items-center scroll-auto">
+            <section className="flex gap-x-2 items-center">
+                <button className="error-btn m-2" onClick={onClose}><FontAwesomeIcon icon={faXmark}/> Zamknij</button>
+                <button type="submit" className="error-btn m-3" onClick={onClear}><FontAwesomeIcon icon={faBroom}/> Wyczyść</button>
+            </section>
             <h1 className="text-2xl font-bold">Opcje szukania</h1>
             <section className="my-4 gap-y-2 flex flex-col w-[80%]">
                 {children}

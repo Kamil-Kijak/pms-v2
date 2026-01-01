@@ -1,40 +1,33 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Title from "../nav/Title";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { faMagnifyingGlass, faRefresh } from "@fortawesome/free-solid-svg-icons";
 import useApi from "../../hooks/useApi";
-import useFormFields from "../../hooks/useFormFields";
 import OwnersSearch from "../searchBars/OwnersSearch"
+import { useSearchParams } from "react-router-dom";
+import Owner from "../models/Owner";
+import UpdateOwner from "../forms/owner/UpdateOwner";
 
 
 const OwnersDisplay = () => {
 
-    const {get} = useApi();
-
-    const [setSearchFieldsData, searchFieldData, errors, setErrors, isValidated] = useFormFields([
-        {
-            name:"nameFilter",
-            allowNull:true,
-        },
-        {
-            name:"limit",
-            allowNull:true,
-            regexp:/^[0-9]+$/,
-            errorText:"Nie poprawny"
-        },
-    ]);
+    const {get, deleteReq} = useApi();
+    const [searchParams] = useSearchParams();
 
     const [formName, setFormName] = useState(null);
 
     const [owners, setOwners] = useState([]);
 
-
+    useEffect(() => {
+        getOwners();
+    }, [searchParams])
 
     const getOwners = () => {
-        const params = new URLSearchParams({
-            ...searchFieldData
-        });
-        get(`/api/owners/get?${params.toString()}`, (res) => setOwners(res.data.owners))
+        get(`/api/owners/get?${searchParams.toString()}`, (res) => setOwners(res.data.owners))
+    }
+
+    const handleDelete = (id) => {
+        deleteReq("/api/owners/delete", {idOwner:id}, (res) => setOwners((prev) => [...prev.filter((obj) => obj.id != id)]))
     }
 
     return (
@@ -54,18 +47,24 @@ const OwnersDisplay = () => {
                 </section>
                 <h2 className="text-3xl font-bold ml-5 mt-2">Znaleziono: {owners.length}</h2>
                 <section className="my-5">
-                    
+                    {
+                        owners.map((obj, index) => <Owner
+                                                        data={obj}
+                                                        key={obj.id}
+                                                        number={index + 1}
+                                                        onDelete={handleDelete}
+                                                        onUpdate={() => setFormName("update")}
+                                                    />)
+                    }
                 </section>
             </section>
             {
                 formName == "search" && <OwnersSearch
                                             onClose={() => setFormName(null)}
-                                            onSubmit={getOwners}
-                                            setFieldData={setSearchFieldsData}
-                                            fieldData={searchFieldData}
-                                            errors={errors}
-                                            isValidated={isValidated}
                                         />
+            }
+            {
+                formName == "update"&& <UpdateOwner onClose={() => setFormName(null)} reload={getOwners}/>
             }
         </section>
     )
