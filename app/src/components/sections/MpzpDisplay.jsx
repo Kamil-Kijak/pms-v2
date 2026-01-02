@@ -8,6 +8,7 @@ import Mpzp from "../models/Mpzp";
 import InsertMpzp from "../forms/mpzp/InsertMpzp";
 import UpdateMpzp from "../forms/mpzp/UpdateMpzp";
 import RoleRequired from "../nav/RoleRequired";
+import ErrorBox from "../popups/ErrorBox";
 
 const MpzpDisplay = () => {
     const {get, deleteReq, post} = useApi();
@@ -34,7 +35,10 @@ const MpzpDisplay = () => {
         <RoleRequired roles={["ADMIN"]}>
             <section className="flex justify-between h-full">
                 <Title title={"PMS-v2 - MPZP"}/>
-                <section className="flex flex-col w-full p-5">
+                <section className="flex flex-col w-full p-5 overflow-y-auto">
+                    <section className="self-start mb-3">
+                        <ErrorBox/>
+                    </section>
                     <section className="flex justify-between">
                         <section className="flex items-center gap-x-5">
                             <h1 className="text-4xl font-bold">MPZP</h1>

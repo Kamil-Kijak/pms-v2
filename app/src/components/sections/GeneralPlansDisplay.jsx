@@ -2,12 +2,13 @@
 import { useEffect, useState } from "react";
 import Title from "../nav/Title"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFolderPlus, faPlus, faRefresh } from "@fortawesome/free-solid-svg-icons";
+import { faFolderPlus, faPlus, faRefresh, faWarning } from "@fortawesome/free-solid-svg-icons";
 import useApi from "../../hooks/useApi";
 import GeneralPlan from "../models/GeneralPlan";
 import InsertGeneralPlan from "../forms/generalPlan/InsertGeneralPlan";
 import UpdateGeneralPlan from "../forms/generalPlan/UpdateGeneralPlan";
 import RoleRequired from "../nav/RoleRequired"
+import ErrorBox from "../popups/ErrorBox"
 
 const GeneralPlansDisplay = () => {
     const {get, deleteReq, post} = useApi();
@@ -34,7 +35,10 @@ const GeneralPlansDisplay = () => {
         <RoleRequired roles={["ADMIN"]}>
             <section className="flex justify-between h-full">
                 <Title title={"PMS-v2 - Plany ogólne"}/>
-                <section className="flex flex-col w-full p-5">
+                <section className="flex flex-col w-full p-5 overflow-y-auto">
+                    <section className="self-start mb-3">
+                        <ErrorBox/>
+                    </section>
                     <section className="flex justify-between">
                         <section className="flex items-center gap-x-5">
                             <h1 className="text-4xl font-bold">Plany ogólne</h1>

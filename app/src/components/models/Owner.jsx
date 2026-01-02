@@ -1,6 +1,7 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useDeleteConfirmStore, useUpdateDataStore } from "../../hooks/stores";
 import { faPen, faTrashCan } from "@fortawesome/free-solid-svg-icons";
+import RoleRequired from "../nav/RoleRequired";
 
 const Owner = ({data, number, onDelete, onUpdate}) => {
 
@@ -14,7 +15,7 @@ const Owner = ({data, number, onDelete, onUpdate}) => {
                     { number && <h1 className="mr-4 font-bold text-2xl">{number}#</h1>}
                     <p className="text-2xl font-bold">{data.name}</p>
                     <p className="text-2xl ml-5">{data.phone.match(/.{1,3}/g).join(" ")}</p>
-                    <p className="text-2xl ml-5">Posiadane działki: {data.lands.length}</p>
+                    <p className="text-2xl ml-5 text-zinc-700 font-bold">{data.lands.length != 0 ? <>Posidane działki {data.lands.length}</> : <>Brak posiadanych działek</>}</p>
                 </section>
                 <section className="flex justify-around items-center gap-x-3">
                     <button className="edit-btn" onClick={() => {
@@ -23,9 +24,11 @@ const Owner = ({data, number, onDelete, onUpdate}) => {
                         }}>
                         <FontAwesomeIcon icon={faPen}/> Edytuj
                     </button>
-                    <button className="error-btn" onClick={() => updateDeleteConfirm(true, () => onDelete(data.id))}>
-                        <FontAwesomeIcon icon={faTrashCan}/> Usuń
-                    </button>
+                    <RoleRequired roles={["ADMIN"]}>
+                        <button className="error-btn" onClick={() => updateDeleteConfirm(true, () => onDelete(data.id))}>
+                            <FontAwesomeIcon icon={faTrashCan}/> Usuń
+                        </button>
+                    </RoleRequired>
                 </section>
             </section>
             {

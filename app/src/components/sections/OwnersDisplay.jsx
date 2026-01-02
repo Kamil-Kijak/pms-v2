@@ -7,6 +7,7 @@ import OwnersSearch from "../searchBars/OwnersSearch"
 import { useSearchParams } from "react-router-dom";
 import Owner from "../models/Owner";
 import UpdateOwner from "../forms/owner/UpdateOwner";
+import ErrorBox from "../popups/ErrorBox";
 
 
 const OwnersDisplay = () => {
@@ -34,16 +35,19 @@ const OwnersDisplay = () => {
         <section className="flex justify-between h-full">
             <Title title={"PMS-v2 - Właściciele"}/>
             <section className="flex flex-col w-full p-5 overflow-y-auto">
+                <section className="self-start mb-3">
+                    <ErrorBox/>
+                </section>
                 <section className="flex justify-between">
-                        <section className="flex items-center gap-x-5">
-                            <h1 className="text-4xl font-bold">Właściciele</h1>
-                            <button className="primary-btn" onClick={() => setFormName("search")}>
-                                <FontAwesomeIcon icon={faMagnifyingGlass}/> Opcje szukania
-                            </button>
-                        </section>
-                        <button className="edit-btn" onClick={getOwners}>
-                            <FontAwesomeIcon icon={faRefresh}/> Odśwież
+                    <section className="flex items-center gap-x-5">
+                        <h1 className="text-4xl font-bold">Właściciele</h1>
+                        <button className="primary-btn" onClick={() => setFormName("search")}>
+                            <FontAwesomeIcon icon={faMagnifyingGlass}/> Opcje szukania
                         </button>
+                    </section>
+                    <button className="edit-btn" onClick={getOwners}>
+                        <FontAwesomeIcon icon={faRefresh}/> Odśwież
+                    </button>
                 </section>
                 <h2 className="text-3xl font-bold ml-5 mt-2">Znaleziono: {owners.length}</h2>
                 <section className="my-5">

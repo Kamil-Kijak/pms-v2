@@ -2,6 +2,7 @@ import { useSearchParams } from "react-router-dom";
 import useApi from "../../hooks/useApi";
 import { useEffect, useState } from "react";
 import Title from "../nav/Title";
+import ErrorBox from "../popups/ErrorBox";
 
 
 const LandsDisplay = () => {
@@ -27,6 +28,11 @@ const LandsDisplay = () => {
     return (
         <section className="flex justify-between h-full">
             <Title title={"PMS-v2 - Działki"}/>
+            <section className="flex flex-col w-full p-5 overflow-y-auto">
+                <section className="self-start mb-3">
+                    <ErrorBox/>
+                </section>
+            </section>
         </section>
     )
 }

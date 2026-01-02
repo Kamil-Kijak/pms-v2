@@ -7,6 +7,7 @@ import LandPurpose from "../models/LandPurpose";
 import InsertLandPurpose from "../forms/landPurpose/InsertLandPurpose"
 import UpdateLandPurpose from "../forms/landPurpose/UpdateLandPurpose"
 import RoleRequired from "../nav/RoleRequired";
+import ErrorBox from "../popups/ErrorBox";
 
 const LandPurposesDisplay = () => {
     const {get, deleteReq, post} = useApi();
@@ -33,7 +34,10 @@ const LandPurposesDisplay = () => {
         <RoleRequired roles={["ADMIN"]}>
             <section className="flex justify-between h-full">
                 <Title title={"PMS-v2 - Przeznaczenia działek"}/>
-                <section className="flex flex-col w-full p-5">
+                <section className="flex flex-col w-full p-5 overflow-y-auto">
+                    <section className="self-start mb-3">
+                        <ErrorBox/>
+                    </section>
                     <section className="flex justify-between">
                         <section className="flex items-center gap-x-5">
                             <h1 className="text-4xl font-bold">Przeznaczenia działek</h1>
