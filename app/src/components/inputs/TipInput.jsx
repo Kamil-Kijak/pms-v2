@@ -28,9 +28,9 @@ const TipInput = ({placeholder = "", title = <></>, handleChange, error = "", va
             />
             {
                 focus &&
-                <section className="max-h-75 absolute z-10 bg-white text-xl w-full border-zinc-400 border-4 rounded-b-xl overflow-y-scroll">
+                <section className="max-h-75 absolute z-10 bg-white text-xl w-full border-zinc-400 border-4 rounded-b-xl overflow-y-scroll overflow-x-hidden">
                     {
-                        filteredOptions.map((obj, index) => <p key={index} className="tipinput-option" data-value={obj} onClick={handleChange}>{obj}</p>)
+                        filteredOptions.map((obj, index) => <p key={index} title={obj} className="tipinput-option" data-value={obj} onClick={handleChange}>{obj}</p>)
                     }
                 </section>
             }

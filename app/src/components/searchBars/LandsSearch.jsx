@@ -114,6 +114,19 @@ const LandsSearch = ({onClose = () => {}}) => {
             setFieldData(Object.fromEntries(searchParams.entries()))
         }
     }, []);
+
+    const handleTownChange = (e) => {
+        let location;
+        if (e.target.value) {
+            location = e.target.value.split(" ");
+        } else {
+            location = e.target.dataset.value.split(" ");
+        }
+
+        setFieldData((prev) => ({...prev, townFilter:location[0], communeFilter:location[1],
+             districtFilter:location[2], provinceFilter:location[3]}))
+    }
+
     return (
         <SearchBarLayout onClose={onClose} isValidated={isValidated} onClear={() => setFieldData({})}>
             <Input
@@ -135,9 +148,9 @@ const LandsSearch = ({onClose = () => {}}) => {
             <TipInput
                 placeholder="Podaj Miejscowość"
                 title="Miejscowość"
-                options={towns.map((obj) => obj.name)}
+                options={towns.map((obj) => `${obj.name} ${obj.location.commune} ${obj.location.district} ${obj.location.province}`)}
                 error={errors.townFilter}
-                handleChange={(e) => setFieldData((prev) => ({...prev, townFilter:e.target.dataset.value, ...(e.target.value && {townFilter:e.target.value})}))}
+                handleChange={handleTownChange}
                 value={fieldData.townFilter}
                 name="townFilter"
             />

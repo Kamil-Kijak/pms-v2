@@ -6,17 +6,29 @@ const withErrorHandling = require("../middlewares/withErrorHandling");
 const {Op} = require("sequelize");
 
 exports.getTowns = withErrorHandling(async (req, res) => {
-    const {town} = req.query;
+    const {town, commune, district, province} = req.query;
     const towns = await Town.findAll({
         attributes:["id", "name"],
         include:{
             model:Location,
             as:"location",
             attributes:["province", "district", "commune"],
+            where:{
+                province:{
+                    [Op.like]:`${province || ""}%`
+                },
+                commune:{
+                    [Op.like]:`${district || ""}%`
+                },
+                commune:{
+                    [Op.like]:`${commune || ""}%`
+                },
+                
+            }
         },
         where:{
             name:{
-                [Op.like]:`${town || ""}%`
+                [Op.like]:`${town || ""}%`,
             }
         },
         order:[["name", "ASC"]]

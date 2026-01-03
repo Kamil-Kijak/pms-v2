@@ -12,7 +12,10 @@ const roleAuthorization = require("../middlewares/roleAuthorization");
 router.use(authorization());
 
 router.get("/get-towns", [
-    query("town").trim().default(null)
+    query("town").trim().default(null),
+    query("commune").trim().default(null),
+    query("district").trim().default(null),
+    query("province").trim().default(null)
 ], locationController.getTowns);
 
 router.use(roleAuthorization(["KSIEGOWOSC", "SEKRETARIAT"]))
