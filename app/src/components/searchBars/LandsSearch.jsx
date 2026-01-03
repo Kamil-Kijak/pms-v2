@@ -116,15 +116,14 @@ const LandsSearch = ({onClose = () => {}}) => {
     }, []);
 
     const handleTownChange = (e) => {
-        let location;
+        let location = "";
         if (e.target.value) {
-            location = e.target.value.split(" ");
-        } else {
-            location = e.target.dataset.value.split(" ");
+            location = e.target.value.split(", ");
+        } else if(e.target.dataset.value) {
+            location = e.target.dataset.value.split(", ");
         }
-
-        setFieldData((prev) => ({...prev, townFilter:location[0], communeFilter:location[1],
-             districtFilter:location[2], provinceFilter:location[3]}))
+        setFieldData((prev) => ({...prev, townFilter:location[0], ...(location[1] && {communeFilter:location[1]}),
+             ...(location[2] && {districtFilter:location[2]}), ...(location[3] && {provinceFilter:location[3]})}))
     }
 
     return (
@@ -148,7 +147,7 @@ const LandsSearch = ({onClose = () => {}}) => {
             <TipInput
                 placeholder="Podaj Miejscowość"
                 title="Miejscowość"
-                options={towns.map((obj) => `${obj.name} ${obj.location.commune} ${obj.location.district} ${obj.location.province}`)}
+                options={towns.map((obj) => `${obj.name}, ${obj.location.commune}, ${obj.location.district}, ${obj.location.province}`)}
                 error={errors.townFilter}
                 handleChange={handleTownChange}
                 value={fieldData.townFilter}

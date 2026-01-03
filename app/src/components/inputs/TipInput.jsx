@@ -10,7 +10,7 @@ const TipInput = ({placeholder = "", title = <></>, handleChange, error = "", va
         if(!value) {
             return options.filter((obj, index) => index <= 40).sort();
         }
-        const regexp = new RegExp(value, "i")
+        const regexp = new RegExp(value.replace("\\", ""), "i")
         return options.filter((obj, index) => regexp.test(obj)).filter((obj, index) => index <= 40).sort()
     }, [value, options]);
 
