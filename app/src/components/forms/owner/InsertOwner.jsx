@@ -1,0 +1,59 @@
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import useApi from "../../../hooks/useApi";
+import Input from "../../inputs/Input";
+import { faPlus} from "@fortawesome/free-solid-svg-icons";
+import useFormFields from "../../../hooks/useFormFields";
+
+const InsertOwner = ({onInsert = (owner) => {}}) => {
+    const {post} = useApi();
+
+    const [setFieldData, fieldData, errors, setErrors, isValidated] = useFormFields([
+        {
+            name:"name",
+            allowNull:false,
+            regexp:/^.{1,100}$/,
+            errorText:"Za długi"
+        },
+        {
+            name:"phone",
+            allowNull:true,
+            regexp:/^[0-9]{9}$/,
+            errorText:"Nie poprawny"
+        },
+    ]);
+
+    const handleSubmit = () => {
+        if(isValidated()) {
+            post("/api/owners/insert", {...fieldData}, (res) => {
+                onInsert({id:res.data.idOwner, ...fieldData});
+                setFieldData({});
+                setErrors({});
+            });
+        }
+    }
+    return (
+        <section className="border-3 p-5 flex flex-col items-center scroll-auto">
+            <h1 className="text-2xl font-bold">Dodawanie właściciela</h1>
+            <section className="my-4 gap-y-2 flex flex-col w-[80%]">
+                <Input
+                    placeholder="Podaj imie"
+                    title="Imie"
+                    error={errors.name}
+                    handleChange={(e) => setFieldData((prev) => ({...prev, name:e.target.value}))}
+                    value={fieldData.name}
+                />
+                <Input
+                    type="phone"
+                    placeholder="Podaj telefon"
+                    title="Numer telefonu"
+                    error={errors.phone}
+                    handleChange={(e) => setFieldData((prev) => ({...prev, phone:e.target.value}))}
+                    value={fieldData.phone}
+                />
+            </section>
+            <button type="button" className="primary-btn" onClick={handleSubmit}><FontAwesomeIcon icon={faPlus}/> Dodaj</button>
+        </section>
+    )
+}
+
+export default InsertOwner;

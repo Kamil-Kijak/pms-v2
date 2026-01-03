@@ -9,12 +9,12 @@ const Owner = ({data, number, onDelete, onUpdate}) => {
     const updateUpdateData = useUpdateDataStore((state) => state.update);
 
     return (
-        <section className="flex flex-col justify-start border-3">
+        <section className="flex flex-col justify-start border-3 m-1">
             <section className="flex justify-between p-5 m-1 items-center">
                 <section className="flex justify-start">
                     { number && <h1 className="mr-4 font-bold text-2xl">{number}#</h1>}
                     <p className="text-2xl font-bold">{data.name}</p>
-                    <p className="text-2xl ml-5">{data.phone.match(/.{1,3}/g).join(" ")}</p>
+                    <p className="text-2xl ml-5">{data.phone ? data.phone.match(/.{1,3}/g).join(" ") : "Brak telefonu"}</p>
                     <p className="text-2xl ml-5 text-zinc-700 font-bold">{data.lands.length != 0 ? <>Posidane działki {data.lands.length}</> : <>Brak posiadanych działek</>}</p>
                 </section>
                 <section className="flex justify-around items-center gap-x-3">

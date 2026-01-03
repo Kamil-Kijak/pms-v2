@@ -49,7 +49,7 @@ exports.getOwners = withErrorHandling(async (req, res) => {
 exports.insertOwner = withErrorHandling(async (req, res) => {
     const {name, phone} = req.body;
     const owner = await Owner.create({name, phone:phone || null});
-    res.status(201).json({success:true, message:"Dodano właściciela", idOwmer:owner.id})
+    res.status(201).json({success:true, message:"Dodano właściciela", idOwner:owner.id})
 });
 
 exports.updateOwner = withErrorHandling(async (req, res) => {

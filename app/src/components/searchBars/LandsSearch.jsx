@@ -7,6 +7,7 @@ import Select from "../inputs/Select";
 import useApi from "../../hooks/useApi";
 import TipInput from "../inputs/TipInput";
 import useLocations from "../../hooks/useLocations";
+import TipSelect from "../inputs/TipSelect";
 
 
 const LandsSearch = ({onClose = () => {}}) => {
@@ -115,12 +116,10 @@ const LandsSearch = ({onClose = () => {}}) => {
         }
     }, []);
 
-    const handleTownChange = (e) => {
+    const handleTownChange = (value) => {
         let location = "";
-        if (e.target.value) {
-            location = e.target.value.split(", ");
-        } else if(e.target.dataset.value) {
-            location = e.target.dataset.value.split(", ");
+        if (value) {
+            location = value.split(", ");
         }
         setFieldData((prev) => ({...prev, townFilter:location[0], ...(location[1] && {communeFilter:location[1]}),
              ...(location[2] && {districtFilter:location[2]}), ...(location[3] && {provinceFilter:location[3]})}))
@@ -153,35 +152,32 @@ const LandsSearch = ({onClose = () => {}}) => {
                 value={fieldData.townFilter}
                 name="townFilter"
             />
-            <TipInput
+            <TipSelect
                 placeholder="Podaj województwo"
                 title="Województwo"
-                options={provinces}
+                options={provinces.map((obj) => ({key:obj, value:obj}))}
                 error={errors.provinceFilter}
-                handleChange={(e) => setFieldData((prev) => ({...prev, provinceFilter:e.target.dataset.value,
-                        ...(e.target.value && {provinceFilter:e.target.value})}))}
+                handleChange={(value) => setFieldData((prev) => ({...prev, provinceFilter:value}))}
                 value={fieldData.provinceFilter}
                 name="provinceFilter"
             />
-            <TipInput
+            <TipSelect
                 placeholder="Podaj powiat"
                 title="Powiat"
+                options={districts.map((obj) => ({key:obj, value:obj}))}
                 error={errors.districtFilter}
-                options={districts}
-                handleChange={(e) => setFieldData((prev) => ({...prev, districtFilter:e.target.dataset.value,
-                        ...(e.target.value && {districtFilter:e.target.value})}))}
+                handleChange={(value) => setFieldData((prev) => ({...prev, districtFilter:value}))}
                 value={fieldData.districtFilter}
                 name="districtFilter"
             />
-            <TipInput
+            <TipSelect
                 placeholder="Podaj gminę"
                 title="Gmina"
+                options={communes.map((obj) => ({key:obj, value:obj}))}
                 error={errors.communeFilter}
-                options={communes}
-                handleChange={(e) => setFieldData((prev) => ({...prev, communeFilter:e.target.dataset.value,
-                     ...(e.target.value && {communeFilter:e.target.value})}))}
+                handleChange={(value) => setFieldData((prev) => ({...prev, communeFilter:value}))}
                 value={fieldData.communeFilter}
-                name="communeFilter"
+                name="districtFilter"
             />
             <Input
                 placeholder="Podaj imie/nazwisko właściciela"

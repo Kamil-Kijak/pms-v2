@@ -55,14 +55,14 @@ router.get("/get-insertion-data", landController.getLandInsertionRequiredData);
 
 router.post("/insert", [
     body("serialNumber").trim().
-    exists({checkFalsy:true}).withMessage("serialNumber is required").
+    default(null).optional({checkFalsy:true}).
     isLength({max:20}).withMessage("serialNumber must be less or equal 20 characters"),
     body("landNumber").trim().
     exists({checkFalsy:true}).withMessage("landNumber is required").
     isLength({max:7}).withMessage("landNumber must be less or equal 7 characters"),
     body("area").trim().
     exists({checkFalsy:true}).withMessage("area is required").
-    isFloat({min:0, max:9999}).withMessage("area must be a float positive value less than 10000").toFloat(),
+    isFloat({min:0, max:9999.9999}).withMessage("area must be a float positive value less than 10000").toFloat(),
     body("town").trim().
     exists({checkFalsy:true}).withMessage("town is required").
     isLength({max:50}).withMessage("town must be less or equal 50 characters"),
@@ -119,14 +119,14 @@ router.post("/insert", [
 router.put("/update", [
     body("idLand").trim().exists({checkFalsy:true}).withMessage("idLand is required"),
     body("serialNumber").trim().
-    exists({checkFalsy:true}).withMessage("serialNumber is required").
+    default(null).optional({checkFalsy:true}).
     isLength({max:20}).withMessage("serialNumber must be less or equal 20 characters"),
     body("landNumber").trim().
     exists({checkFalsy:true}).withMessage("landNumber is required").
     isLength({max:7}).withMessage("landNumber must be less or equal 7 characters"),
     body("area").trim().
     exists({checkFalsy:true}).withMessage("area is required").
-    isFloat({min:0, max:9999}).withMessage("area must be a float positive value less than 10000").toFloat(),
+    isFloat({min:0, max:9999.9999}).withMessage("area must be a float positive value less than 10000").toFloat(),
     body("town").trim().
     exists({checkFalsy:true}).withMessage("town is required").
     isLength({max:50}).withMessage("town must be less or equal 50 characters"),

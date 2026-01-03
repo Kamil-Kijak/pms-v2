@@ -2,7 +2,7 @@ import { faWarning } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 
-const Select = ({options, defaultOption = "", defaultOptionHidden = true, title = <></>, handleChange, error = "", value, name=""}) => {
+const Select = ({options, defaultOption = "", defaultOptionHidden = true, title = <></>, handleChange, error = "", value, name="", selected}) => {
     return (
         <section className="w-full">
             <p className="font-bold mb-1 text-lg">{title}</p>
