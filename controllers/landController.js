@@ -117,7 +117,7 @@ exports.getRentLands = withErrorHandling(async (req, res) => {
             {
                 model:LandPurpose,
                 as:"landPurpose",
-                required:false,
+                required:true,
                 attributes:[],
                 where:{
                     type:"Dzierżawa"
@@ -146,7 +146,6 @@ exports.getLandInsertionRequiredData = withErrorHandling(async (req, res) => {
 exports.getLands = withErrorHandling(async (req, res) => {
     const {serialFilter, purchaseYearFilter, lowSellDateFilter, highSellDateFilter, ownerFilter, purposeFilter, rentFilter, lowAreaFilter,
          highAreaFilter, communeFilter, districtFilter, provinceFilter, townFilter, landNumberFilter, groundClassFilter, limit} = req.query;
-
     const lands = await Land.findAll({
         attributes:["id", "serialNumber", "landNumber", "propertyTax", "area", "registerNumber", "mortgage", "description", "waterCompany"],
         include:[
@@ -181,9 +180,13 @@ exports.getLands = withErrorHandling(async (req, res) => {
                 as:"sell",
                 attributes:["date", "price", "buyer", "actNumber"],
                 required:lowSellDateFilter || highSellDateFilter,
-                date:{
-                    ...(lowSellDateFilter && {[Op.gte]:lowSellDateFilter}),
-                    ...(highSellDateFilter && {[Op.lte]:highSellDateFilter}),   
+                where:{
+                    ...((lowSellDateFilter || highAreaFilter) && {
+                        date:{
+                            ...(lowSellDateFilter && {[Op.gte]:lowSellDateFilter}),
+                            ...(highSellDateFilter && {[Op.lte]:highSellDateFilter}),   
+                        }
+                    })
                 }
             },
             {
@@ -192,10 +195,12 @@ exports.getLands = withErrorHandling(async (req, res) => {
                 attributes:["date", "price", "seller", "actNumber"],
                 required:purchaseYearFilter,
                 where:{
-                    date:{
-                        ...(purchaseYearFilter && {[Op.gte]:new Date(purchaseYearFilter, 0, 1)}),
-                        ...(purchaseYearFilter && {[Op.lte]:new Date(purchaseYearFilter, 11, 31)})
-                    }
+                    ...(purchaseYearFilter && {
+                        date:{
+                            [Op.gte]:new Date(Number(purchaseYearFilter), 0, 1),
+                            [Op.lte]:new Date(Number(purchaseYearFilter), 11, 31)
+                        }
+                    })
                 }
             },
             {
@@ -219,11 +224,13 @@ exports.getLands = withErrorHandling(async (req, res) => {
                 as:"landPurpose",
                 required:purposeFilter,
                 attributes:["type"],
-                where:{
-                    type:{
-                        [Op.like]:`${purposeFilter || ""}%`
+                ...(purposeFilter && {
+                    where:{
+                        type:{
+                            [Op.like]:`${purposeFilter || ""}%`
+                        }
                     }
-                }
+                })
             },
             {
                 model:Mpzp,
@@ -240,7 +247,7 @@ exports.getLands = withErrorHandling(async (req, res) => {
             {
                 model:Rent,
                 as:"rent",
-                required:rentFilter,
+                required:rentFilter == "true",
                 attributes:["id"],
                 include:{
                     model:Renter,
@@ -272,10 +279,12 @@ exports.getLands = withErrorHandling(async (req, res) => {
             landNumber:{
                 [Op.like]:`${landNumberFilter || ""}%`
             },
-            area:{
-                ...(lowAreaFilter && {[Op.gte]:lowAreaFilter}),
-                ...(highAreaFilter && {[Op.lte]:highAreaFilter})
-            }
+            ...((lowAreaFilter || highAreaFilter) && {
+                area:{
+                    ...(lowAreaFilter && {[Op.gte]:lowAreaFilter}),
+                    ...(highAreaFilter && {[Op.lte]:highAreaFilter})
+                }
+            })
         },
         ...(limit && {limit:Number(limit)})
     });
@@ -334,7 +343,7 @@ exports.insertLand = withErrorHandling(async (req, res) => {
             idLocation,
             name:town
         })
-        idTown = createResult.insertId
+        idTown = createResult.id;
     }
     const createdLand = await Land.create({
         serialNumber,
@@ -413,7 +422,7 @@ exports.updateLand = withErrorHandling(async (req, res) => {
             idLocation,
             name:town
         })
-        idTown = createResult.insertId
+        idTown = createResult.id;
     }
     await Sell.update({
         date:sellDate || null,

@@ -65,7 +65,8 @@ const InsertLand = ({onClose = () => {}, reload = () => {}}) => {
             name:"propertyTax",
             allowNull:false,
             regexp:/^(false|true)$/,
-            errorText:"Nie poprawne"
+            errorText:"Nie poprawne",
+            defaultValue:"false"
         },
         {
             name:"serialNumber",
@@ -83,7 +84,8 @@ const InsertLand = ({onClose = () => {}, reload = () => {}}) => {
             name:"mortgage",
             allowNull:true,
             regexp:/^(false|true)$/,
-            errorText:"Nie poprawna"
+            errorText:"Nie poprawna",
+            defaultValue:"false"
         },
         {
             name:"idLandType",
@@ -119,7 +121,8 @@ const InsertLand = ({onClose = () => {}, reload = () => {}}) => {
             name:"waterCompany",
             allowNull:true,
             regexp:/^(false|true)$/,
-            errorText:"Nie poprawna"
+            errorText:"Nie poprawna",
+            defaultValue:"false"
         },
         {
             name:"purchaseDate",
@@ -180,7 +183,7 @@ const InsertLand = ({onClose = () => {}, reload = () => {}}) => {
     const handleSubmit = (e) => {
         e.preventDefault();
         if(isValidated()) {
-            post("/api/land/insert", {...fieldData}, (res) => {
+            post("/api/lands/insert", {...fieldData}, (res) => {
                 onClose()
                 reload()
             });
@@ -281,13 +284,13 @@ const InsertLand = ({onClose = () => {}, reload = () => {}}) => {
                                 }}/>
                         </section>
                     </section>
-                    <TextArea
-                        placeholder="Podaj opis działki"
-                        title="Podaj opis działki (opcjonalnie)"
-                        error={errors.description}
-                        handleChange={(e) => setFieldData((prev) => ({...prev, description:e.target.value}))}
-                        value={fieldData.description}
-                    />
+                        <TextArea
+                            placeholder="Podaj opis działki"
+                            title="Podaj opis działki (opcjonalnie)"
+                            error={errors.description}
+                            handleChange={(e) => setFieldData((prev) => ({...prev, description:e.target.value}))}
+                            value={fieldData.description}
+                        />
                     <section className="flex items-start w-full mt-5 gap-x-5">
                         <TipSelect
                             placeholder="Podaj przeznaczenie"
@@ -342,7 +345,7 @@ const InsertLand = ({onClose = () => {}, reload = () => {}}) => {
                             </>}
                             error={errors.propertyTax}
                             handleChange={(e) => setFieldData((prev) => ({...prev, propertyTax:e.target.value}))}
-                            value={fieldData.propertyTax || "false"}
+                            value={fieldData.propertyTax}
                         />
                     </section>
                     <section className="flex items-start w-full gap-x-5">
@@ -354,7 +357,7 @@ const InsertLand = ({onClose = () => {}, reload = () => {}}) => {
                             </>}
                             error={errors.mortgage}
                             handleChange={(e) => setFieldData((prev) => ({...prev, mortgage:e.target.value}))}
-                            value={fieldData.mortgage || "false"}
+                            value={fieldData.mortgage}
                         />
                         <Select
                             title="Spółka wodna"
@@ -364,8 +367,76 @@ const InsertLand = ({onClose = () => {}, reload = () => {}}) => {
                             </>}
                             error={errors.waterCompany}
                             handleChange={(e) => setFieldData((prev) => ({...prev, waterCompany:e.target.value}))}
-                            value={fieldData.waterCompany || "false"}
+                            value={fieldData.waterCompany}
                         />
+                    </section>
+                    <h1 className="text-center m-3 text-2xl font-bold">Dane nabycia</h1>
+                    <section className="flex items-start w-full gap-x-5">
+                        <Input
+                            type="date"
+                            placeholder="Podaj datę nabycia"
+                            title="Data nabycia (opcjonalnie)"
+                            error={errors.purchaseDate}
+                            handleChange={(e) => setFieldData((prev) => ({...prev, purchaseDate:e.target.value}))}
+                            value={fieldData.purchaseDate}
+                        />
+                        <Input
+                            placeholder="Podaj nr aktu nabycia"
+                            title="Nr aktu nabycia (opcjonalnie)"
+                            error={errors.purchaseActNumber}
+                            handleChange={(e) => setFieldData((prev) => ({...prev, purchaseActNumber:e.target.value}))}
+                            value={fieldData.purchaseActNumber}
+                        /> 
+                    </section>
+                    <section className="flex items-start w-full gap-x-5">
+                        <Input
+                            placeholder="Podaj od kogo nabyte"
+                            title="Od kogo nabyte (opcjonalnie)"
+                            error={errors.seller}
+                            handleChange={(e) => setFieldData((prev) => ({...prev, seller:e.target.value}))}
+                            value={fieldData.seller}
+                        />
+                        <Input
+                            placeholder="Podaj cenę(zł) nabycia"
+                            title="Cena(zł) nabycia (opcjonalnie)"
+                            error={errors.purchasePrice}
+                            handleChange={(e) => setFieldData((prev) => ({...prev, purchasePrice:e.target.value}))}
+                            value={fieldData.purchasePrice}
+                        /> 
+                    </section>
+                    <h1 className="text-center m-3 text-2xl font-bold">Dane sprzedaży</h1>
+                    <section className="flex items-start w-full gap-x-5">
+                        <Input
+                            type="date"
+                            placeholder="Podaj datę sprzedaży"
+                            title="Data sprzedaży (opcjonalnie)"
+                            error={errors.sellDate}
+                            handleChange={(e) => setFieldData((prev) => ({...prev, sellDate:e.target.value}))}
+                            value={fieldData.sellDate}
+                        />
+                        <Input
+                            placeholder="Podaj nr aktu sprzedaży"
+                            title="Nr aktu sprzedaży (opcjonalnie)"
+                            error={errors.sellActNumber}
+                            handleChange={(e) => setFieldData((prev) => ({...prev, sellActNumber:e.target.value}))}
+                            value={fieldData.sellActNumber}
+                        /> 
+                    </section>
+                    <section className="flex items-start w-full gap-x-5">
+                        <Input
+                            placeholder="Podaj komu sprzedane"
+                            title="Komu sprzedane (opcjonalnie)"
+                            error={errors.buyer}
+                            handleChange={(e) => setFieldData((prev) => ({...prev, buyer:e.target.value}))}
+                            value={fieldData.buyer}
+                        />
+                        <Input
+                            placeholder="Podaj wartość(zł) sprzedaży"
+                            title="Wartość(zł) sprzedaży (opcjonalnie)"
+                            error={errors.sellPrice}
+                            handleChange={(e) => setFieldData((prev) => ({...prev, sellPrice:e.target.value}))}
+                            value={fieldData.sellPrice}
+                        /> 
                     </section>
                 </section>
                 <button type="submit" className="primary-btn"><FontAwesomeIcon icon={faPlus}/> Dodaj</button>

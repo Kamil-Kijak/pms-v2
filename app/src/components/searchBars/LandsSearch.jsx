@@ -177,7 +177,7 @@ const LandsSearch = ({onClose = () => {}}) => {
                 error={errors.communeFilter}
                 handleChange={(value) => setFieldData((prev) => ({...prev, communeFilter:value}))}
                 value={fieldData.communeFilter}
-                name="districtFilter"
+                name="communeFilter"
             />
             <Input
                 placeholder="Podaj imie/nazwisko właściciela"
@@ -253,7 +253,7 @@ const LandsSearch = ({onClose = () => {}}) => {
             <Input
                 type="date"
                 placeholder="Podaj datę sprzedaży od"
-                title="data sprzedaży do"
+                title="data sprzedaży od"
                 error={errors.lowSellDateFilter}
                 handleChange={(e) => setFieldData((prev) => ({...prev, lowSellDateFilter:e.target.value}))}
                 value={fieldData.lowSellDateFilter}

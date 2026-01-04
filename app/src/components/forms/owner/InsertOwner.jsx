@@ -36,8 +36,8 @@ const InsertOwner = ({onInsert = (owner) => {}}) => {
             <h1 className="text-2xl font-bold">Dodawanie właściciela</h1>
             <section className="my-4 gap-y-2 flex flex-col w-[80%]">
                 <Input
-                    placeholder="Podaj imie"
-                    title="Imie"
+                    placeholder="Podaj imie/nazwisko"
+                    title="Imie/nazwisko"
                     error={errors.name}
                     handleChange={(e) => setFieldData((prev) => ({...prev, name:e.target.value}))}
                     value={fieldData.name}
@@ -45,7 +45,7 @@ const InsertOwner = ({onInsert = (owner) => {}}) => {
                 <Input
                     type="phone"
                     placeholder="Podaj telefon"
-                    title="Numer telefonu"
+                    title="Numer telefonu (opcjonalnie)"
                     error={errors.phone}
                     handleChange={(e) => setFieldData((prev) => ({...prev, phone:e.target.value}))}
                     value={fieldData.phone}

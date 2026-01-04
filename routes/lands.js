@@ -32,7 +32,7 @@ router.get("/get", [
     isDate().withMessage("highSellDateFilter must be a date").toDate(),
     query("ownerFilter").trim().default(null),
     query("purposeFilter").trim().default(null),
-    query("rentFilter").trim().default(null).optional({checkFalsy:true}).
+    query("rentFilter").trim().default(null).optional({checkFalsy:false}).
     isBoolean().withMessage("rentFilter must be a boolean value").toBoolean(),
     query("lowAreaFilter").trim().default(null).optional({checkFalsy:true}).
     isFloat().withMessage("lowAreaFilter must be a float value").toFloat(),
