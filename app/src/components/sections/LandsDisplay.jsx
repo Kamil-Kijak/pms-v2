@@ -8,6 +8,7 @@ import { faMagnifyingGlass, faPlus, faPrint, faRefresh } from "@fortawesome/free
 import LandsSearch from "../searchBars/LandsSearch";
 import InsertLand from "../forms/land/InsertLand";
 import Land from "../models/Land";
+import FilesDesc from "../forms/land/FilesDesc";
 
 
 const LandsDisplay = () => {
@@ -81,7 +82,7 @@ const LandsDisplay = () => {
                 formName == "insert" && <InsertLand onClose={() => setFormName(null)} reload={getLands}/>
             }
             {
-                formName == "files" && <></>
+                formName == "files" && <FilesDesc onClose={() => setFormName(null)} reload={getLands}/>
             }
         </section>
     )

@@ -289,15 +289,16 @@ exports.getLands = withErrorHandling(async (req, res) => {
         },
         ...(limit && {limit:Number(limit)})
     });
+    const newLands = lands.map(l => l.get({ plain: true }));
     const landFilesFolder = path.join(__dirname, "..", config.landFilesFolder);
     const folders = fs.readdirSync(landFilesFolder);
-    let newFolders = folders.filter((obj) => lands.map((land) => land.id).includes(Number(obj)));
+    let newFolders = folders.filter((obj) => lands.map((land) => land.id).includes(obj));
     newFolders.forEach((value) => {
         const files = fs.readdirSync(path.join(landFilesFolder, value));
         const index = lands.findIndex((land) => land.id == value);
-        lands[index]["files"] = files
+        newLands[index].files = files
     });
-    res.status(200).json({success:true, message:"Pobrano działki", lands});
+    res.status(200).json({success:true, message:"Pobrano działki", lands:newLands});
 });
 
 exports.insertLand = withErrorHandling(async (req, res) => {
