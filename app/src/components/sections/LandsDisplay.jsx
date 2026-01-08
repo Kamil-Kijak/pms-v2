@@ -10,6 +10,7 @@ import InsertLand from "../forms/land/InsertLand";
 import Land from "../models/Land";
 import FilesDesc from "../forms/land/FilesDesc";
 import UpdateLand from "../forms/land/UpdateLand";
+import InsertRent from "../forms/land/InsertRent";
 
 
 const LandsDisplay = () => {
@@ -36,7 +37,7 @@ const LandsDisplay = () => {
     return (
         <section className="flex justify-between h-full">
             <Title title={"PMS-v2 - Działki"}/>
-            <section className={`flex flex-col w-full p-5 overflow-y-auto ${(formName == "insert" || formName == "update") && "hidden"}`}>
+            <section className={`flex flex-col w-full p-5 overflow-y-auto ${(["insert", "update", "addRent"].includes(formName)) && "hidden"}`}>
                 <section className="self-start mb-3">
                     <ErrorBox/>
                 </section>
@@ -69,6 +70,7 @@ const LandsDisplay = () => {
                                                     onUpdate={() => setFormName("update")}
                                                     key={obj.id}
                                                     onShowFiles={() => setFormName("files")}
+                                                    onAddRent={() => setFormName("addRent")}
                                                     />)
                     }
                 </section>
@@ -84,6 +86,9 @@ const LandsDisplay = () => {
             }
             {
                 formName == "files" && <FilesDesc onClose={() => setFormName(null)} reload={getLands}/>
+            }
+            {
+                formName == "addRent" && <InsertRent onClose={() => setFormName(null)} reload={getLands}/>
             }
         </section>
     )

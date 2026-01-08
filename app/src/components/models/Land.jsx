@@ -1,4 +1,4 @@
-import { faEye, faFolderOpen, faPen, faTrashCan } from "@fortawesome/free-solid-svg-icons";
+import { faEye, faFolderOpen, faPen, faTrashCan, faUserPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useDeleteConfirmStore, useUpdateDataStore } from "../../hooks/stores";
 import { useState } from "react";
@@ -6,7 +6,7 @@ import RoleRequired from "../nav/RoleRequired";
 import {DateTime} from "luxon"
 
 
-const Land = ({data, number, onDelete, onUpdate, onShowFiles}) => {
+const Land = ({data, number, onDelete, onUpdate, onShowFiles, onAddRent}) => {
 
     const updateDeleteConfirm = useDeleteConfirmStore((state) => state.update);
     const updateUpdateData = useUpdateDataStore((state) => state.update);
@@ -19,8 +19,21 @@ const Land = ({data, number, onDelete, onUpdate, onShowFiles}) => {
                 <section className="flex gap-x-5 items-center">
                     <h1 className="font-bold text-2xl">#{number}</h1>
                     <h1 className="text-xl">{data.serialNumber || "Brak numeru seryjnego działki"}</h1>
+                    {
+                        (data.sell.date || data.sell.price || data.sell.actNumber || data.sell.buyer) &&
+                        <h1 className="text-2xl font-bold text-red-700">Sprzedana!</h1>
+                    }
                 </section>
                 <section className="flex gap-x-3 items-center">
+                    {
+                        (!data.rent && data.landPurpose.type == "Dzierżawa") &&
+                        <button className="primary-btn" onClick={() => {
+                            updateUpdateData({id:data.id, number})
+                            onAddRent()
+                        }}>
+                            <FontAwesomeIcon icon={faUserPlus}/> Dodaj dzierżawe
+                        </button>
+                    }
                     <button className="primary-btn" onClick={() => setMore((prev) => !prev)}>
                         <FontAwesomeIcon icon={faEye}/> {more ? "Mniej" : "Więcej"}
                     </button>
@@ -68,8 +81,9 @@ const Land = ({data, number, onDelete, onUpdate, onShowFiles}) => {
                     <p>{data.owner.phone || "Brak tel"}</p>
                 </div>
                 <div className="flex-col text-center flex items-center text-xl">
-                    <span className="font-bold">Dzierżawiona</span>
-                    <p>{data.rent ? "Tak" : "Nie"}</p>
+                    <span className="font-bold">Dzierżawca</span>
+                    <p>{data.rent ? data.rent.renter.name : "Brak"}</p>
+                    <p>{data.rent && (data.rent.renter.phone ? data.rent.renter.phone : "Brak tel")}</p>
                 </div>
                 <div className="flex-col text-center flex items-center text-xl">
                     <span className="font-bold">Przeznaczenie</span>
