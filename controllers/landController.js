@@ -206,7 +206,7 @@ exports.getLands = withErrorHandling(async (req, res) => {
             {
                 model:Owner,
                 as:"owner",
-                attributes:["name", "phone"],
+                attributes:["id", "name", "phone"],
                 where:{
                     name:{
                         [Op.like]:`%${ownerFilter || ""}%`
@@ -217,13 +217,13 @@ exports.getLands = withErrorHandling(async (req, res) => {
                 model:LandType,
                 as:"landType",
                 required:false,
-                attributes:["type"]
+                attributes:["id", "type"]
             },
             {
                 model:LandPurpose,
                 as:"landPurpose",
                 required:purposeFilter || rentFilter,
-                attributes:["type"],
+                attributes:["id", "type"],
                 ...((purposeFilter || rentFilter) && {
                     where:{
                         type:{
@@ -237,13 +237,13 @@ exports.getLands = withErrorHandling(async (req, res) => {
                 model:Mpzp,
                 as:"mpzp",
                 required:false,
-                attributes:["code"]
+                attributes:["id", "code"]
             },
             {
                 model:GeneralPlan,
                 as:"generalPlan",
                 required:false,
-                attributes:["code"]
+                attributes:["id", "code"]
             },
             {
                 model:Rent,
@@ -253,7 +253,7 @@ exports.getLands = withErrorHandling(async (req, res) => {
                 include:{
                     model:Renter,
                     as:"renter",
-                    attributes:["name", "phone"]
+                    attributes:["id", "name", "phone"]
                 }
             },
             {
@@ -436,7 +436,7 @@ exports.updateLand = withErrorHandling(async (req, res) => {
         date:purchaseDate || null,
         actNumber:purchaseActNumber || null,
         price:purchasePrice || null,
-        buyer:seller || null,
+        seller:seller || null,
     }, {where:{id:idLand}});
     await Land.update({
         serialNumber,

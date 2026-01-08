@@ -9,6 +9,7 @@ import LandsSearch from "../searchBars/LandsSearch";
 import InsertLand from "../forms/land/InsertLand";
 import Land from "../models/Land";
 import FilesDesc from "../forms/land/FilesDesc";
+import UpdateLand from "../forms/land/UpdateLand";
 
 
 const LandsDisplay = () => {
@@ -35,51 +36,51 @@ const LandsDisplay = () => {
     return (
         <section className="flex justify-between h-full">
             <Title title={"PMS-v2 - Działki"}/>
-            {
-                formName != "insert" && 
-                <section className="flex flex-col w-full p-5 overflow-y-auto">
-                    <section className="self-start mb-3">
-                        <ErrorBox/>
+            <section className={`flex flex-col w-full p-5 overflow-y-auto ${(formName == "insert" || formName == "update") && "hidden"}`}>
+                <section className="self-start mb-3">
+                    <ErrorBox/>
+                </section>
+                <section className="flex justify-between">
+                    <section className="flex items-center gap-x-5">
+                        <h1 className="text-4xl font-bold">Działki</h1>
+                        <button className="primary-btn" onClick={() => setFormName("insert")}>
+                            <FontAwesomeIcon icon={faPlus}/> Dodaj nową działkę
+                        </button>
+                        <button className="primary-btn" onClick={() => setFormName("search")}>
+                            <FontAwesomeIcon icon={faMagnifyingGlass}/> Opcje szukania
+                        </button>
                     </section>
-                    <section className="flex justify-between">
-                        <section className="flex items-center gap-x-5">
-                            <h1 className="text-4xl font-bold">Działki</h1>
-                            <button className="primary-btn" onClick={() => setFormName("insert")}>
-                                <FontAwesomeIcon icon={faPlus}/> Dodaj nową działkę
-                            </button>
-                            <button className="primary-btn" onClick={() => setFormName("search")}>
-                                <FontAwesomeIcon icon={faMagnifyingGlass}/> Opcje szukania
-                            </button>
-                        </section>
-                        <section className="flex items-center gap-x-5">
-                            <button className="primary-btn">
-                                <FontAwesomeIcon icon={faPrint}/> Drukuj
-                            </button>
-                            <button className="edit-btn" onClick={getLands}>
-                                <FontAwesomeIcon icon={faRefresh}/> Odśwież
-                            </button>
-                        </section>
-                    </section>
-                    <h2 className="text-3xl font-bold ml-5 mt-2">Znaleziono: {lands.length}</h2>
-                    <section className="my-5">
-                        {
-                            lands.map((obj, index) => <Land
-                                                        data={obj}
-                                                        number={index + 1}
-                                                        onDelete={handleDelete}
-                                                        onUpdate={() => setFormName("update")}
-                                                        key={obj.id}
-                                                        onShowFiles={() => setFormName("files")}
-                                                        />)
-                        }
+                    <section className="flex items-center gap-x-5">
+                        <button className="primary-btn">
+                            <FontAwesomeIcon icon={faPrint}/> Drukuj
+                        </button>
+                        <button className="edit-btn" onClick={getLands}>
+                            <FontAwesomeIcon icon={faRefresh}/> Odśwież
+                        </button>
                     </section>
                 </section>
-            }
+                <h2 className="text-3xl font-bold ml-5 mt-2">Znaleziono: {lands.length}</h2>
+                <section className="my-5">
+                    {
+                        lands.map((obj, index) => <Land
+                                                    data={obj}
+                                                    number={index + 1}
+                                                    onDelete={handleDelete}
+                                                    onUpdate={() => setFormName("update")}
+                                                    key={obj.id}
+                                                    onShowFiles={() => setFormName("files")}
+                                                    />)
+                    }
+                </section>
+            </section>
             {
                 formName == "search" && <LandsSearch onClose={() => setFormName(null)}/>
             }
             {
                 formName == "insert" && <InsertLand onClose={() => setFormName(null)} reload={getLands}/>
+            }
+            {
+                formName == "update" && <UpdateLand onClose={() => setFormName(null)} reload={getLands}/>
             }
             {
                 formName == "files" && <FilesDesc onClose={() => setFormName(null)} reload={getLands}/>

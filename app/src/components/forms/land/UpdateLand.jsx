@@ -1,4 +1,4 @@
-import { faPen, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { faPlus, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import useFormFields from "../../../hooks/useFormFields"
@@ -12,11 +12,13 @@ import useLocations from "../../../hooks/useLocations";
 import InsertOwner from "../owner/InsertOwner";
 import Select from "../../inputs/Select";
 import TextArea from "../../inputs/TextArea";
+import { useUpdateDataStore } from "../../../hooks/stores";
+import {DateTime} from "luxon"
 
+const UpdateLand = ({onClose = () => {}, reload = () => {}}) => {
 
-const InsertLand = ({onClose = () => {}, reload = () => {}}) => {
-
-    const {post, get} = useApi();
+    const {get, put} = useApi();
+    const landData = useUpdateDataStore((state) => state.data);
 
     const [setFieldData, fieldData, errors, setErrors, isValidated] = useFormFields([
         {
@@ -177,13 +179,44 @@ const InsertLand = ({onClose = () => {}, reload = () => {}}) => {
     const [insertionData, setInsertionData] = useState({});
 
     useEffect(() => {
-        get("/api/lands/get-insertion-data", (res) => setInsertionData(res.data.data));
+        const func = async () => {
+            await get("/api/lands/get-insertion-data", (res) => setInsertionData(res.data.data));
+            // getting data from landData
+            setFieldData({
+                landNumber:landData.landNumber,
+                area:landData.area,
+                town:landData.town.name,
+                commune:landData.town.location.commune,
+                district:landData.town.location.district,
+                province:landData.town.location.province,
+                idOwner:landData.owner.id,
+                propertyTax:`${landData.propertyTax}`,
+                serialNumber:landData.serialNumber,
+                registerNumber:landData.registerNumber,
+                mortgage:`${landData.mortgage}`,
+                idLandType:landData.landType ? landData.landType.id : null,
+                idLandPurpose:landData.landPurpose ? landData.landPurpose.id : null,
+                idMpzp:landData.mpzp ? landData.mpzp.id : null,
+                idGeneralPlan:landData.generalPlan ? landData.generalPlan.id : null,
+                description:landData.description,
+                waterCompany:`${landData.waterCompany}`,
+                purchaseDate:landData.purchase.date ? DateTime.fromISO(landData.purchase.date).toFormat("yyyy-MM-dd") : null,
+                purchaseActNumber:landData.purchase.actNumber,
+                seller:landData.purchase.seller,
+                purchasePrice:landData.purchase.price,
+                sellDate:landData.sell.date ? DateTime.fromISO(landData.sell.date).toFormat("yyyy-MM-dd") : null,
+                sellActNumber:landData.sell.actNumber,
+                buyer:landData.purchase.buyer,
+                sellPrice:landData.sell.price
+            });
+        }
+        func()
     }, []);
 
     const handleSubmit = (e) => {
         e.preventDefault();
         if(isValidated()) {
-            post("/api/lands/insert", {...fieldData}, (res) => {
+            put("/api/lands/update", {...fieldData, idLand:landData.id}, (res) => {
                 onClose()
                 reload()
             });
@@ -199,13 +232,12 @@ const InsertLand = ({onClose = () => {}, reload = () => {}}) => {
              ...(location[2] && {district:location[2]}), ...(location[3] && {province:location[3]})}))
     }
 
-
     return (
         <section className="w-full flex justify-center items-start">
             <form onSubmit={handleSubmit} className="min-w-[43%] p-5 flex flex-col items-center justify-center scroll-auto">
                 <ErrorBox/>
                 <button className="error-btn m-2" onClick={onClose}><FontAwesomeIcon icon={faXmark}/> Zamknij</button>
-                <h1 className="text-2xl font-bold">Dodaj działkę</h1>
+                <h1 className="text-2xl font-bold">Edycja działki Nr {landData.number}</h1>
                 <section className="my-4 gap-y-2 flex flex-col w-full">
                     <section className="flex gap-x-5 items-start w-full">
                         <Input
@@ -439,10 +471,10 @@ const InsertLand = ({onClose = () => {}, reload = () => {}}) => {
                         /> 
                     </section>
                 </section>
-                <button type="submit" className="primary-btn"><FontAwesomeIcon icon={faPen}/> Dodaj</button>
+                <button type="submit" className="primary-btn"><FontAwesomeIcon icon={faPlus}/> zapisz zmiany</button>
             </form>
         </section>
     )
 }
 
-export default InsertLand;
+export default UpdateLand;

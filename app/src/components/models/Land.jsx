@@ -2,6 +2,8 @@ import { faEye, faFolderOpen, faPen, faTrashCan } from "@fortawesome/free-solid-
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useDeleteConfirmStore, useUpdateDataStore } from "../../hooks/stores";
 import { useState } from "react";
+import RoleRequired from "../nav/RoleRequired";
+import {DateTime} from "luxon"
 
 
 const Land = ({data, number, onDelete, onUpdate, onShowFiles}) => {
@@ -34,9 +36,11 @@ const Land = ({data, number, onDelete, onUpdate, onShowFiles}) => {
                         }}>
                         <FontAwesomeIcon icon={faPen}/> Edytuj
                     </button>
-                    <button className="error-btn" onClick={() => updateDeleteConfirm(true, () => onDelete(data.id))}>
-                        <FontAwesomeIcon icon={faTrashCan}/> Usuń
-                    </button>
+                    <RoleRequired roles={["ADMIN"]}>
+                        <button className="error-btn" onClick={() => updateDeleteConfirm(true, () => onDelete(data.id))}>
+                            <FontAwesomeIcon icon={faTrashCan}/> Usuń
+                        </button>
+                    </RoleRequired>
                 </section>
             </section>
             <section className="flex gap-x-5">
@@ -120,7 +124,7 @@ const Land = ({data, number, onDelete, onUpdate, onShowFiles}) => {
                         <section className="flex gap-x-5 w-full">
                             <div className="flex-col text-center flex items-center text-xl flex-1">
                                 <span className="font-bold">Data nabycia</span>
-                                <p>{data.purchase.date || "Brak"}</p>
+                                <p>{data.purchase.date ? DateTime.fromISO(data.purchase.date).toFormat("dd.MM.yyyy") : "Brak"}</p>
                             </div>
                             <div className="flex-col text-center flex items-center text-xl flex-1">
                                 <span className="font-bold">Nr aktu nabycia</span>
@@ -141,7 +145,7 @@ const Land = ({data, number, onDelete, onUpdate, onShowFiles}) => {
                         <section className="flex gap-x-5 w-full">
                             <div className="flex-col text-center flex items-center text-xl flex-1">
                                 <span className="font-bold">Data sprzedaży</span>
-                                <p>{data.sell.date || "Brak"}</p>
+                                <p>{data.sell.date ? DateTime.fromISO(data.sell.date).toFormat("dd.MM.yyyy") : "Brak"}</p>
                             </div>
                             <div className="flex-col text-center flex items-center text-xl flex-1">
                                 <span className="font-bold">Nr aktu sprzedaży</span>
