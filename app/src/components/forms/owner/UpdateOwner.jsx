@@ -42,7 +42,7 @@ const UpdateOwner = ({onClose = () => {}, reload = () => {}}) => {
         }
     }
     return (
-        <form onSubmit={handleSubmit} className="w-[33%] border-l-4 border-l-green-700 p-5 flex flex-col items-center scroll-auto">
+        <form onSubmit={handleSubmit} className="w-[33%] border-l-4 border-l-green-700 p-5 flex flex-col items-center overflow-auto">
             <button className="error-btn m-2" onClick={onClose}><FontAwesomeIcon icon={faXmark}/> Zamknij</button>
             <h1 className="text-2xl font-bold">Edycja Właściciela</h1>
             <h2 className="text-2xl font-bold">Nr {ownerData.number}</h2>

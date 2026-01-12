@@ -32,7 +32,7 @@ const InsertOwner = ({onInsert = (owner) => {}}) => {
         }
     }
     return (
-        <section className="border-3 p-5 flex flex-col items-center scroll-auto">
+        <section className="border-3 p-5 flex flex-col items-center overflow-auto">
             <h1 className="text-2xl font-bold text-center">Dodawanie właściciela do systemu</h1>
             <section className="my-4 gap-y-2 flex flex-col w-[80%]">
                 <Input

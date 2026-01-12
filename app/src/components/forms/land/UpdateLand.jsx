@@ -233,8 +233,8 @@ const UpdateLand = ({onClose = () => {}, reload = () => {}}) => {
     }
 
     return (
-        <section className="w-full flex justify-center items-start">
-            <form onSubmit={handleSubmit} className="min-w-[43%] p-5 flex flex-col items-center justify-center scroll-auto">
+        <section className="w-full flex justify-center items-start overflow-auto">
+            <form onSubmit={handleSubmit} className="min-w-[43%] p-5 flex flex-col items-center justify-center">
                 <ErrorBox/>
                 <button className="error-btn m-2" onClick={onClose}><FontAwesomeIcon icon={faXmark}/> Zamknij</button>
                 <h1 className="text-2xl font-bold">Edycja działki Nr {landData.number}</h1>

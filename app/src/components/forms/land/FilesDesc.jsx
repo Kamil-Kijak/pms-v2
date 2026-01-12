@@ -37,7 +37,7 @@ const FilesDesc = ({onClose, reload}) => {
 
 
     return (
-        <section className="w-[33%] border-l-4 border-l-green-700 p-5 flex flex-col items-center scroll-auto">
+        <section className="w-[33%] border-l-4 border-l-green-700 p-5 flex flex-col items-center overflow-auto">
             <button className="error-btn m-2" onClick={onClose}><FontAwesomeIcon icon={faXmark}/> Zamknij</button>
             <ErrorBox/>
             <h1 className="text-2xl font-bold">Pliki działki</h1>

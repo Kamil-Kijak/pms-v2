@@ -37,6 +37,12 @@ const Renter = ({data, number, onDelete, onUpdate, onRentDelete, onRentUpdate}) 
             </section>
             {
                 data.rents.length != 0 &&
+                <section className="m-1 px-5 flex justify-start items-center">
+                    <h2 className="font-bold text-xl">Suma czynszu: {data.rents.reduce((acc, obj) => acc + (obj.land.area * obj.rental), 0)}zł</h2>
+                </section>
+            }
+            {
+                data.rents.length != 0 &&
                 <section className="m-3">
                     {
                         data.rents.map((obj, index) =>

@@ -4,11 +4,12 @@ import Title from "../nav/Title";
 import ErrorBox from "../popups/ErrorBox";
 import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMagnifyingGlass, faRefresh } from "@fortawesome/free-solid-svg-icons";
+import { faFile, faMagnifyingGlass, faRefresh } from "@fortawesome/free-solid-svg-icons";
 import RentsSearch from "../searchBars/RentsSearch";
 import UpdateRenter from "../forms/rent/UpdateRenter"
 import Renter from "../models/Renter";
 import UpdateRent from "../forms/rent/UpdateRent";
+import RentsSummarize from "../summaries/RentsSummarize";
 
 const RentsDisplay = () => {
 
@@ -48,6 +49,9 @@ const RentsDisplay = () => {
                         <button className="primary-btn" onClick={() => setFormName("search")}>
                             <FontAwesomeIcon icon={faMagnifyingGlass}/> Opcje szukania
                         </button>
+                        <button className="primary-btn" onClick={() => setFormName("summarize")}>
+                            <FontAwesomeIcon icon={faFile}/> Podsumowanie
+                        </button>
                     </section>
                     <button className="edit-btn" onClick={getRenters}>
                         <FontAwesomeIcon icon={faRefresh}/> Odśwież
@@ -76,6 +80,9 @@ const RentsDisplay = () => {
             }
             {
                 formName == "updateRent" && <UpdateRent onClose={() => setFormName(null)} reload={getRenters}/>
+            }
+            {
+                formName == "summarize" && <RentsSummarize onClose={() => setFormName(null)} renters={renters}/>
             }
         </section>
     )
