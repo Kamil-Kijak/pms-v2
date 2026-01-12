@@ -10,6 +10,7 @@ import { useUserStore } from "../../hooks/stores";
 import UpdateUser from "../forms/user/UpdateUser";
 import UpdateUserPassword from "../forms/user/UpdateUserPassword";
 import RoleRequired from "../nav/RoleRequired";
+import ErrorBox from "../popups/ErrorBox";
 
 const UsersDisplay = () => {
     const {get, deleteReq} = useApi();
@@ -38,6 +39,9 @@ const UsersDisplay = () => {
             <section className="flex justify-between h-full">
                 <Title title={"PMS-v2 - Użytkownicy"}/>
                 <section className="flex flex-col w-full p-5 overflow-y-auto">
+                    <section className="self-start mb-3">
+                        <ErrorBox/>
+                    </section>
                     <section className="flex justify-between">
                         <section className="flex items-center gap-x-5">
                             <h1 className="text-4xl font-bold">Użytkownicy</h1>

@@ -51,16 +51,12 @@ exports.getRenters = withErrorhandling(async (req, res) => {
                         [Op.lte]:new Date(new Date().getFullYear(), monthFilter - 1, new Date(new Date().getFullYear(), monthFilter, 0).getDate())
                     }
                 }),
-                ...(endYearFilter && {
+                ...((endYearFilter || showExpired != "true") && {
                     endDate:{
-                        [Op.lte]:new Date(endYearFilter, 11, 31)
+                        ...(endYearFilter && {[Op.lte]:new Date(endYearFilter, 11, 31)}),
+                        ...(showExpired != "true" && {[Op.gte]:new Date()})
                     }
                 }),
-                ...(!showExpired && {
-                    endDate:{
-                        [Op.gte]:new Date()
-                    }
-                })
 
             }
         },

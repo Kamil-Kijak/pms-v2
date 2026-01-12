@@ -1,6 +1,6 @@
 
 
-const {validationResult} = require("express-validator");
+const {validationResult, matchedData} = require("express-validator");
 
 const withErrorHandling = (callback) => {
     return async (req, res) => {
