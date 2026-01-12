@@ -1,6 +1,7 @@
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ErrorBox from "../../popups/ErrorBox";
-import { faPlus, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { faPen, faPlus, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { useUpdateDataStore } from "../../../hooks/stores";
 import useFormFields from "../../../hooks/useFormFields";
 import Input from "../../inputs/Input";
@@ -11,12 +12,14 @@ import useApi from "../../../hooks/useApi";
 import Select from "../../inputs/Select";
 import {DateTime} from "luxon";
 
-const InsertRent = ({onClose = () => {}, reload = () => {}}) => {
+const UpdateRent = ({onClose = () => {}, reload = () => {}}) => {
 
-    const landData = useUpdateDataStore((state) => state.data);
-    const {get, post} = useApi();
+    const {get, put} = useApi();
+
+    const rentData = useUpdateDataStore((state) => state.data);
 
     const [renters, setRenters] = useState([]);
+
 
     const [setFieldData, fieldData, errors, setErrors, isValidated] = useFormFields([
         {
@@ -50,7 +53,18 @@ const InsertRent = ({onClose = () => {}, reload = () => {}}) => {
     ]);
 
     useEffect(() => {
-        get("/api/renters/get-all", (res) => setRenters(res.data.renters));
+        const func = async () => {
+            await get("/api/renters/get-all", (res) => setRenters(res.data.renters));
+            setFieldData({
+                idRenter:rentData.idRenter,
+                startDate:DateTime.fromISO(rentData.startDate).toFormat("yyyy-MM-dd"),
+                endDate:DateTime.fromISO(rentData.endDate).toFormat("yyyy-MM-dd"),
+                rental:`${rentData.rental}`,
+                issueRentalFactureMonth:DateTime.fromISO(rentData.issueRentalFactureDate).month,
+                issueRentalFactureDay:DateTime.fromISO(rentData.issueRentalFactureDate).day
+            })
+        }
+        func()
     }, []);
 
 
@@ -58,8 +72,8 @@ const InsertRent = ({onClose = () => {}, reload = () => {}}) => {
         e.preventDefault();
         if(isValidated()) {
             const date = new Date(2000, fieldData.issueRentalFactureMonth - 1, fieldData.issueRentalFactureDay);
-            post("/api/rents/insert", {...fieldData, issueRentalFactureDate:DateTime.fromJSDate(date).toFormat("yyyy-MM-dd"),
-                 idLand:landData.id}, (res) => {
+            put("/api/rents/update", {...fieldData, issueRentalFactureDate:DateTime.fromJSDate(date).toFormat("yyyy-MM-dd"),
+                 idRent:rentData.id}, (res) => {
                 onClose()
                 reload()
             });
@@ -71,7 +85,8 @@ const InsertRent = ({onClose = () => {}, reload = () => {}}) => {
             <form className="min-w-[43%] p-5 flex flex-col items-center justify-center scroll-auto">
                 <ErrorBox/>
                 <button className="error-btn m-2" onClick={onClose}><FontAwesomeIcon icon={faXmark}/> Zamknij</button>
-                <h1 className="text-2xl font-bold">Dodaj dzierżawe do działki nr {landData.number}</h1>
+                <h1 className="text-2xl font-bold">Edycja dzierżawy dzierżawcy</h1>
+                <h2 className="text-xl font-bold mt-2">{rentData.renter.name} {rentData.renter.phone.match(/.{3}/g).join(" ")}</h2>
                 <section className="my-4 gap-y-2 flex flex-col w-full">
                     <Input
                         type="date"
@@ -149,11 +164,11 @@ const InsertRent = ({onClose = () => {}, reload = () => {}}) => {
                         </section>
                     </section>
                 </section>
-                <button type="button" className="primary-btn" onClick={handleSubmit}><FontAwesomeIcon icon={faPlus}/> Dodaj</button>
+                <button type="button" className="primary-btn" onClick={handleSubmit}><FontAwesomeIcon icon={faPen}/> Zapisz zmiany</button>
              </form>
              
         </section>
     )
 }
 
-export default InsertRent;
+export default UpdateRent;

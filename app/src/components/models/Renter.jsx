@@ -4,7 +4,8 @@ import { faPen, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { useDeleteConfirmStore, useUpdateDataStore } from "../../hooks/stores";
 import {DateTime} from "luxon"
 
-const Renter = ({data, number, onDelete, onUpdate}) => {
+const Renter = ({data, number, onDelete, onUpdate, onRentDelete, onRentUpdate}) => {
+
 
     const updateDeleteConfirm = useDeleteConfirmStore((state) => state.update);
     const updateUpdateData = useUpdateDataStore((state) => state.update);
@@ -44,18 +45,21 @@ const Renter = ({data, number, onDelete, onUpdate}) => {
                                 <h1 className="text-xl"><strong>Numer seryjny działki: </strong>{data.serialNumber || "Brak numeru seryjnego działki"}</h1>
                                 <section className="flex gap-x-3">
                                     <button className="edit-btn" onClick={() => {
-                                            updateUpdateData({...obj, number})
+                                            updateUpdateData({...obj, renter:{name:data.name, phone:data.phone}})
+                                            onRentUpdate()
                                         }}>
                                         <FontAwesomeIcon icon={faPen}/> Edytuj
                                     </button>
                                     <RoleRequired roles={["ADMIN"]}>
-                                        <button className="error-btn" onClick={() => updateDeleteConfirm(true, () => onDelete(data.id))}>
+                                        <button className="error-btn" onClick={() => updateDeleteConfirm(true, () => onRentDelete(obj.id))}>
                                             <FontAwesomeIcon icon={faTrashCan}/> Usuń
                                         </button>
                                     </RoleRequired>
                                 </section>
                             </section>
-                            <h1 className="text-xl"><strong>Data rozpoczęcia/zakończenia dzierżawy: </strong>{DateTime.fromISO(obj.startDate).toFormat("dd.MM.yyyy")} - {DateTime.fromISO(obj.endDate).toFormat("dd.MM.yyyy")}</h1>
+                            <h1 className="text-xl"><strong>Data rozpoczęcia/zakończenia dzierżawy: </strong>{DateTime.fromISO(obj.startDate).toFormat("dd.MM.yyyy")} - {DateTime.fromISO(obj.endDate).toFormat("dd.MM.yyyy")}
+                            <span className="text-2xl font-bold text-red-700 ml-3">{DateTime.fromISO(obj.endDate).diffNow().toMillis() < 0 && "Umowa przedawniona!"}</span>
+                            </h1>
                             <section className="flex gap-x-8">
                                 <div className="flex-col text-center flex items-center text-xl">
                                     <span className="font-bold">Stawka czynszu</span>

@@ -8,6 +8,7 @@ import { faMagnifyingGlass, faRefresh } from "@fortawesome/free-solid-svg-icons"
 import RentsSearch from "../searchBars/RentsSearch";
 import UpdateRenter from "../forms/rent/UpdateRenter"
 import Renter from "../models/Renter";
+import UpdateRent from "../forms/rent/UpdateRent";
 
 const RentsDisplay = () => {
 
@@ -26,6 +27,10 @@ const RentsDisplay = () => {
         deleteReq("/api/renters/delete", {idRenter:id}, (res) => setRenters((prev) => [...prev.filter((obj) => obj.id != id)]))
     }
 
+    const handleRentDelete = (id) => {
+        deleteReq("/api/rents/delete", {idRent:id}, (res) => getRenters())
+    }
+
     useEffect(() => {
         getRenters();
     }, [searchParams])
@@ -33,7 +38,7 @@ const RentsDisplay = () => {
     return(
         <section className="flex justify-between h-full">
             <Title title={"PMS-v2 - Dzierżawy i dzierżawcy"}/>
-            <section className="flex flex-col w-full p-5 overflow-y-auto">
+            <section className={`flex flex-col w-full p-5 overflow-y-auto ${(["updateRent"].includes(formName)) && "hidden"}`}>
                 <section className="self-start mb-3">
                     <ErrorBox/>
                 </section>
@@ -57,6 +62,8 @@ const RentsDisplay = () => {
                             data={obj}
                             onDelete={handleDelete}
                             onUpdate={(e) => setFormName("update")}
+                            onRentDelete={handleRentDelete}
+                            onRentUpdate={(e) => setFormName("updateRent")}
                         />)
                     }
                 </section>
@@ -66,6 +73,9 @@ const RentsDisplay = () => {
             }
             {
                 formName == "update" && <UpdateRenter onClose={() => setFormName(null)} reload={getRenters}/>
+            }
+            {
+                formName == "updateRent" && <UpdateRent onClose={() => setFormName(null)} reload={getRenters}/>
             }
         </section>
     )
