@@ -6,7 +6,7 @@ const RoleRequired = ({children, roles=["ADMIN", "KSIEGOWOSC", "SEKRETARIAT", "T
     const user = useUserStore((state) => state.user);
 
     return (
-        roles.includes(user.role) ? children : <Navigate to={"/"} replace/>
+        roles.includes(user.role) && children
     )
 }
 

@@ -1,6 +1,10 @@
 
 import RoleRequired from "../nav/RoleRequired"
 import Title from "../nav/Title";
+import PrintButton from "../inputs/PrintButton"
+import LandForm from "../toPrint/LandForm"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faFile } from "@fortawesome/free-solid-svg-icons";
 
 const FormsDisplay = () => {
     return (
@@ -12,7 +16,9 @@ const FormsDisplay = () => {
                         <h1 className="text-4xl font-bold">Formularze</h1>
                     </section>
                     <section className="my-5">
-                        <button className="primary-btn text-xl">Formularz działki</button>
+                        <PrintButton printComponent={<LandForm/>} documentTitle="System SK INVEST/formularz">
+                            <FontAwesomeIcon icon={faFile}/> Formularz działki
+                        </PrintButton>
                     </section>
                 </section>
             </section>

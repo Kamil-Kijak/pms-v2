@@ -11,6 +11,8 @@ const DashboardLayout = ({children}) => {
     const auth = useUserStore((state) => state.auth)
     const {get} = useApi();
 
+    console.log(user);
+
     const logout = () => {
         get("/api/users/logout", (res) => auth());
     }

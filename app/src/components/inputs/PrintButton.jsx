@@ -1,7 +1,7 @@
 import { useRef } from "react";
 import { useReactToPrint } from "react-to-print"
 
-const PrintButton = ({title = <>Drukuj</>, documentTitle="dokument", printComponent}) => {
+const PrintButton = ({children, documentTitle="dokument", printComponent}) => {
     const printComponentRef = useRef(null);
 
     const handlePrint = useReactToPrint({
@@ -12,7 +12,7 @@ const PrintButton = ({title = <>Drukuj</>, documentTitle="dokument", printCompon
     return (
     <>
         <section className="my-1">
-            <button className="base-btn text-xl" onClick={handlePrint}>{title}</button>
+            <button className="primary-btn text-xl" onClick={handlePrint}>{children}</button>
         </section>
         <section className="hidden">
             <section ref={printComponentRef}>
