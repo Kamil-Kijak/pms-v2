@@ -8,6 +8,7 @@ import LandPurposesDisplay from "../components/sections/LandPurposesDisplay";
 import OwnersDisplay from "../components/sections/OwnersDisplay";
 import LandsDisplay from "../components/sections/LandsDisplay";
 import RentsDisplay from "../components/sections/RentsDisplay";
+import FormsDisplay from "../components/sections/FormsDisplay";
 
 const DashboardPage = () => {
     return (
@@ -21,6 +22,7 @@ const DashboardPage = () => {
                 <Route path="/owners" element={<OwnersDisplay/>}/>
                 <Route path="/rents" element={<RentsDisplay/>}/>
                 <Route path="/" element={<LandsDisplay/>}/>
+                <Route path="/forms" element={<FormsDisplay/>}/>
             </Routes>
         </DashboardLayout>
     )
