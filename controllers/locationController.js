@@ -64,3 +64,9 @@ exports.updateLocation = withErrorHandling(async (req, res) => {
     const [affectedRows] = await Location.update({taxDistrict, agriculturalTax, forestTax}, {where:{id:idLocation}});
     res.status(200).json({success:true, message:"Zaktualizowano lokalizacje", affectedRows})
 });
+
+exports.updateAllLocations = withErrorHandling(async (req, res) => {
+    const {agriculturalTax, forestTax} = req.body;
+    const [affectedRows] = await Location.update({...(agriculturalTax && {agriculturalTax}), ...(forestTax && {forestTax})});
+    res.status(200).json({success:true, message:"Zaktualizowano lokalizacje", affectedRows})
+});

@@ -50,4 +50,13 @@ router.put("/update", [
     toFloat()
 ], locationController.updateLocation);
 
+router.put("/update-all", [
+    body("agriculturalTax").trim().default(null).optional({checkFalsy:true}).
+    isFloat({min:0, max:9999}).withMessage("agriculturalTax must be a float positive value less than 10000").
+    toFloat(),
+    body("forestTax").trim().default(null).optional({checkFalsy:true}).
+    isFloat({min:0, max:9999}).withMessage("forestTax must be a float positive value less than 10000").
+    toFloat()
+], locationController.updateAllLocations);
+
 module.exports = router;

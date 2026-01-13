@@ -4,10 +4,11 @@ import { useSearchParams } from "react-router-dom";
 import Title from "../nav/Title";
 import ErrorBox from "../popups/ErrorBox";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMagnifyingGlass, faRefresh } from "@fortawesome/free-solid-svg-icons";
+import { faEdit, faMagnifyingGlass, faRefresh } from "@fortawesome/free-solid-svg-icons";
 import CommunesSearch from "../searchBars/CommunesSearch";
 import Commune from "../models/Commune";
 import UpdateLocation from "../forms/location/UpdateLocation";
+import UpdateAllLocations from "../forms/location/UpdateAllLocations";
 
 const CommunesDisplay = () => {
     const {get, put} = useApi();
@@ -37,6 +38,9 @@ const CommunesDisplay = () => {
                         <button className="primary-btn" onClick={() => setFormName("search")}>
                             <FontAwesomeIcon icon={faMagnifyingGlass}/> Opcje szukania
                         </button>
+                        <button className="edit-btn" onClick={() => setFormName("updateAll")}>
+                            <FontAwesomeIcon icon={faEdit}/> Edycja wszystkich
+                        </button>
                     </section>
                     <button className="edit-btn" onClick={getCommunes}>
                         <FontAwesomeIcon icon={faRefresh}/> Odśwież
@@ -59,6 +63,9 @@ const CommunesDisplay = () => {
             }
             {
                 formName == "update" && <UpdateLocation onClose={() => setFormName(null)} reload={getCommunes}/>
+            }
+            {
+                formName == "updateAll" && <UpdateAllLocations onClose={() => setFormName(null)} reload={getCommunes}/>
             }
         </section>
     )
