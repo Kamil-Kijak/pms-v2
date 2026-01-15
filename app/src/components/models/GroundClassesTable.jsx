@@ -8,7 +8,7 @@ const GroundClassesTable = ({title = "", data = [], headHeaders = [], onDelete, 
     const updateUpdateData = useUpdateDataStore((state) => state.update);
 
     return (
-        <section className="my-5">
+        <section className="my-10 flex flex-col justify-center items-center">
             <h1 className="font-bold text-center text-2xl mb-5">{title}</h1>
             <table>
                 <thead>
