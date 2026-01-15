@@ -9,7 +9,7 @@ import { useEffect } from "react";
 
 
 const UpdateGroundClass = ({onClose = () => {}, reload = () => {}}) => {
-    const {put} = useApi();
+    const {put, get} = useApi();
 
     const groundClassData = useUpdateDataStore((state) => state.data);
 
@@ -104,6 +104,16 @@ const UpdateGroundClass = ({onClose = () => {}, reload = () => {}}) => {
             insertion()
         }
     }
+
+    useEffect(() => {
+        if(fieldData.groundClass && fieldData.groundClass != groundClassData.class && fieldData.groundClass.length > 1) {
+            get("/api/ground-classes/count?groundClass=" + fieldData.groundClass, (res) => {
+                if(res.data.count > 0) {
+                    setErrors((prev) => ({...prev, groundClass:"Już taka klasa gruntu istnieje"}))
+                } 
+            })
+        }
+    }, [fieldData.groundClass])
     
 
     return (

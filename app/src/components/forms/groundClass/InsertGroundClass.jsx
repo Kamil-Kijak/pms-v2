@@ -9,7 +9,7 @@ import { useEffect } from "react";
 
 const InsertGroundClass = ({onClose = () => {}, reload = () => {}}) => {
 
-    const {post} = useApi();
+    const {post, get} = useApi();
 
     const [setFieldData, fieldData, errors, setErrors, isValidated] = useFormFields([
         {
@@ -89,6 +89,16 @@ const InsertGroundClass = ({onClose = () => {}, reload = () => {}}) => {
             }))
         }
     }, [fieldData.tax])
+
+    useEffect(() => {
+        if(fieldData.groundClass && fieldData.groundClass.length > 1) {
+            get("/api/ground-classes/count?groundClass=" + fieldData.groundClass, (res) => {
+                if(res.data.count > 0) {
+                    setErrors((prev) => ({...prev, groundClass:"Już taka klasa gruntu istnieje"}))
+                } 
+            })
+        }
+    }, [fieldData.groundClass])
 
     return (
         <form onSubmit={handleSubmit} className="w-[33%] border-l-4 border-l-green-700 p-5 flex flex-col items-center overflow-auto">
