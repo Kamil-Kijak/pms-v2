@@ -4,43 +4,28 @@ import useApi from "../../hooks/useApi";
 import Title from "../nav/Title";
 import ErrorBox from "../popups/ErrorBox";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPen, faPlus, faRefresh, faTrashCan } from "@fortawesome/free-solid-svg-icons";
+import { faPlus, faRefresh } from "@fortawesome/free-solid-svg-icons";
 import RoleRequired from "../nav/RoleRequired";
 import GroundClassesTable from "../models/GroundClassesTable"
 import InsertGroundClass from "../forms/groundClass/InsertGroundClass";
 
 const GroundClassesDisplay = () => {
-    const {get} = useApi();
+    const {get, deleteReq} = useApi();
 
     const [formName, setFormName] = useState(null);
-    const [groundClasses, setGroundClasses] = useState({});
+    const [groundClasses, setGroundClasses] = useState([]);
 
     const getGroundClasses = () => {
-        // get("/api/ground-classes/get", (res) => {
-        //     const classes = res.data.classes;
-        //     const finalClasses = {};
-        //     [...classes].forEach((obj) => {
-        //         if(!finalClasses[obj.tax]) {
-        //             finalClasses[obj.tax] = [];
-        //         }
-        //         const element = finalClasses[obj.tax].find((value) => value.class == obj.class)
-        //         if(element) {
-        //             element.converters[obj.taxDistrict] = obj.converter;
-        //         } else {
-        //             if(obj.tax == "rolny")
-        //                 obj.converters = [obj.converter];
-        //             else
-        //                 obj.converters = []
-        //             finalClasses[obj.tax] = [...finalClasses[obj.tax], obj]
-        //         }
-        //     })
-        //     setGroundClasses(finalClasses);
-        // })
+        get("/api/ground-classes/get", (res) => setGroundClasses(res.data.classes))
     }
 
     useEffect(() => {
         getGroundClasses();
     }, []);
+
+    const handleDelete = (id) => {
+        deleteReq("/api/ground-classes/delete", {idGroundClass:id}, (res) => setGroundClasses((prev) => [...prev.filter((obj) => obj.id != id)]))
+    }
 
     return (
         <RoleRequired roles={["KSIEGOWOSC", "SEKRETARIAT"]}>
@@ -61,21 +46,24 @@ const GroundClassesDisplay = () => {
                             <FontAwesomeIcon icon={faRefresh}/> Odśwież
                         </button>
                     </section>
-                    <h2 className="text-3xl font-bold ml-5 mt-2">Znaleziono: {Object.values(groundClasses).reduce((acc, value) => value.reduce((acc, value) => acc + 1, 0) + acc, 0)}</h2>
+                    <h2 className="text-3xl font-bold ml-5 mt-2">Znaleziono: {groundClasses.length}</h2>
                     <section className="my-5">
                         <GroundClassesTable
+                            onDelete={handleDelete}
                             title="Przeliczniki klas rolnych"
-                            data={groundClasses["rolny"]}
+                            data={groundClasses.filter((obj) => obj.tax == "rolny")}
                             headHeaders={["Klasa", "I", "II", "III", "IV", "Operacje"]}
                         />
                         <GroundClassesTable
+                            onDelete={handleDelete}
                             title="Klasy gruntów leśnych"
-                            data={groundClasses["lesny"]}
+                            data={groundClasses.filter((obj) => obj.tax == "lesny")}
                             headHeaders={["Klasa", "Operacje"]}
                         />
                         <GroundClassesTable
+                            onDelete={handleDelete}
                             title="Inne klasy gruntów"
-                            data={groundClasses["brak"]}
+                            data={groundClasses.filter((obj) => obj.tax == "brak")}
                             headHeaders={["Klasa", "Operacje"]}
                         />
                     </section>

@@ -55,7 +55,8 @@ exports.insertGroundClass = withErrorHandling(async (req, res) => {
     for(let i = 0;i<convertersData.length;i++) {
         await Converter.create({
             idGroundClass:groundClassObject.id,
-            converter:convertersData[i]
+            converter:convertersData[i],
+            taxDistrict:i + 1
         })
     }
     res.status(201).json({success:true, message:"wstawiono klasę gruntu"})

@@ -56,26 +56,19 @@ const InsertGroundClass = ({onClose = () => {}, reload = () => {}}) => {
 
     const handleSubmit = (e) => {
         const insertion = async () => {
-            const data = {
+
+            const converters = [
+                fieldData.converter1,
+                fieldData.converter2,
+                fieldData.converter3,
+                fieldData.converter4
+            ]
+
+            await post("/api/ground-classes/insert", {
                 groundClass:fieldData.groundClass,
                 tax:fieldData.tax,
-                taxDistrict:1,
-                converter:fieldData.converter1
-            }
-            await post("/api/ground-classes/insert", data);
-            if(fieldData.tax == "rolny") {
-                data.taxDistrict++;
-                data.converter = fieldData.converter2;
-                await post("/api/ground-classes/insert", data);
-
-                data.taxDistrict++;
-                data.converter = fieldData.converter3;
-                await post("/api/ground-classes/insert", data);
-
-                data.taxDistrict++;
-                data.converter = fieldData.converter4;
-                await post("/api/ground-classes/insert", data);
-            }
+                convertersData:converters
+            })
             onClose();
             reload()
         }

@@ -1,8 +1,11 @@
 import { faPen, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useDeleteConfirmStore } from "../../hooks/stores";
 
-const GroundClassesTable = ({title = "", data = [], headHeaders = []}) => {
+const GroundClassesTable = ({title = "", data = [], headHeaders = [], onDelete}) => {
     
+    const updateDeleteConfirm = useDeleteConfirmStore((state) => state.update);
+
     return (
         <section className="my-5">
             <h1 className="font-bold text-center text-2xl mb-5">{title}</h1>
@@ -20,12 +23,13 @@ const GroundClassesTable = ({title = "", data = [], headHeaders = []}) => {
                             <tr className="border-2 text-xl text-center font-bold" key={obj.id}>
                                 <td className="border-2 p-5 min-w-20 min-h-20">{obj.class}</td>
                                 {
-                                    obj.converters.map((obj, index) => 
-                                        <td className="border-2 p-5 min-w-20 min-h-20" key={index}>{obj}</td>
+                                    obj.tax == "rolny" &&
+                                    obj.converters.sort((a, b) => a.taxDistrict - b.taxDistrict).map((obj, index) => 
+                                        <td className="border-2 p-5 min-w-20 min-h-20" key={index}>{obj.converter}</td>
                                     )
                                 }
-                                <td className="p-5 min-w-20 min-h-20 flex gap-x-3">
-                                    <button className="error-btn"><FontAwesomeIcon icon={faTrashCan}/> Usuń</button>
+                                <td className="p-5 min-w-20 min-h-20 flex gap-x-3 text-base">
+                                    <button className="error-btn" onClick={() => updateDeleteConfirm(true, () => onDelete(obj.id))}><FontAwesomeIcon icon={faTrashCan}/> Usuń</button>
                                     <button className="edit-btn"><FontAwesomeIcon icon={faPen}/> Edytuj</button>
                                 </td>
                                 
