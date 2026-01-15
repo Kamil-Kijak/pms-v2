@@ -16,26 +16,26 @@ const GroundClassesDisplay = () => {
     const [groundClasses, setGroundClasses] = useState({});
 
     const getGroundClasses = () => {
-        get("/api/ground-classes/get", (res) => {
-            const classes = res.data.classes;
-            const finalClasses = {};
-            [...classes].forEach((obj) => {
-                if(!finalClasses[obj.tax]) {
-                    finalClasses[obj.tax] = [];
-                }
-                const element = finalClasses[obj.tax].find((value) => value.class == obj.class)
-                if(element) {
-                    element.converters[obj.taxDistrict] = obj.converter;
-                } else {
-                    if(obj.tax == "rolny")
-                        obj.converters = [obj.converter];
-                    else
-                        obj.converters = []
-                    finalClasses[obj.tax] = [...finalClasses[obj.tax], obj]
-                }
-            })
-            setGroundClasses(finalClasses);
-        })
+        // get("/api/ground-classes/get", (res) => {
+        //     const classes = res.data.classes;
+        //     const finalClasses = {};
+        //     [...classes].forEach((obj) => {
+        //         if(!finalClasses[obj.tax]) {
+        //             finalClasses[obj.tax] = [];
+        //         }
+        //         const element = finalClasses[obj.tax].find((value) => value.class == obj.class)
+        //         if(element) {
+        //             element.converters[obj.taxDistrict] = obj.converter;
+        //         } else {
+        //             if(obj.tax == "rolny")
+        //                 obj.converters = [obj.converter];
+        //             else
+        //                 obj.converters = []
+        //             finalClasses[obj.tax] = [...finalClasses[obj.tax], obj]
+        //         }
+        //     })
+        //     setGroundClasses(finalClasses);
+        // })
     }
 
     useEffect(() => {

@@ -16,9 +16,6 @@ router.get("/get", groundClassController.getGroundClasses);
 router.get("/count",[
     query("groundClass").trim().
     exists({checkFalsy:true}).withMessage("groundClass is required"),
-    query("taxDistrict").trim().
-    exists({checkFalsy:true}).withMessage("taxDistrict is required").
-    isInt().withMessage("taxDistrict must be a int value").toInt(),
 ], groundClassController.getGroundClassCount);
 
 router.get("/unique", groundClassController.getUniqueGroundClasses);
@@ -29,12 +26,11 @@ router.post("/insert", [
     body("groundClass").trim().
     exists({checkFalsy:true}).withMessage("groundClass is required").
     isLength({max:10}).withMessage("groundClass must be less or equal 10 characters"),
-    body("converter").trim().
-    exists({checkFalsy:true}).withMessage("converter is required").
-    isFloat({min:0, max:9}).withMessage("converter must be a float positive value less than 10").toFloat(),
-    body("taxDistrict").trim().
-    exists({checkFalsy:true}).withMessage("taxDistrict is required").
-    isInt().withMessage("taxDistrict must be int value").toInt(),
+    body("convertersData").trim().
+    exists({checkFalsy:true}).withMessage("convertersData is required").
+    isArray({min:4, max:4}).withMessage("convertersData must have 3 elements"),
+    body("convertersData.*").
+    isFloat({min:0, max:9}).withMessage("converter in convertersData must be a float positive value less than 10").toFloat(),
     body("tax").trim().
     exists({checkFalsy:true}).withMessage("tax is required").
     isIn(["rolny", "lesny", "brak"]).withMessage("tax is not whitelisted")
@@ -46,12 +42,11 @@ router.put("/update", [
     body("groundClass").trim().
     exists({checkFalsy:true}).withMessage("groundClass is required").
     isLength({max:10}).withMessage("groundClass must be less or equal 10 characters"),
-    body("converter").trim().
-    exists({checkFalsy:true}).withMessage("converter is required").
-    isFloat({min:0, max:9}).withMessage("converter must be a float positive value less than 10").toFloat(),
-    body("taxDistrict").trim().
-    exists({checkFalsy:true}).withMessage("taxDistrict is required").
-    isInt().withMessage("taxDistrict must be a int value").toInt(),
+    body("convertersData").trim().
+    exists({checkFalsy:true}).withMessage("convertersData is required").
+    isArray({min:4, max:4}).withMessage("convertersData must have 3 elements"),
+    body("convertersData.*").
+    isFloat({min:0, max:9}).withMessage("converter in convertersData must be a float positive value less than 10").toFloat(),
     body("tax").trim().
     exists({checkFalsy:true}).withMessage("tax is required").
     isIn(["rolny", "lesny", "brak"]).withMessage("tax is not whitelisted")

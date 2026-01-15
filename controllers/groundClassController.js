@@ -2,10 +2,11 @@
 const GroundClass = require("../models/GroundClass");
 const withErrorHandling = require("../middlewares/withErrorHandling");
 const {Sequelize} = require("sequelize");
+const Converter = require("../models/Converter");
 
 exports.getGroundClassCount = withErrorHandling(async (req, res) => {
-    const {groundClass, taxDistrict} = req.query;
-    const count = await GroundClass.count({where:{class:groundClass, taxDistrict}})
+    const {groundClass} = req.query;
+    const count = await GroundClass.count({where:{class:groundClass}})
     res.status(200).json({success:true, message:"Pobrano ilość", count});
 });
 
@@ -20,31 +21,43 @@ exports.getUniqueGroundClasses = withErrorHandling(async (req, res) => {
 
 exports.getGroundClasses = withErrorHandling(async (req, res) => {
     const classes = await GroundClass.findAll({
-        attributes:["id", "class", "converter", "tax", "taxDistrict"],
+        attributes:["id", "class", "tax"],
+        include:{
+            model:Converter,
+            as:"converters",
+            attributes:["id", "converter", "taxDistrict"]
+        },
         order:[["class", "ASC"]]
-    });
+    })
     res.status(200).json({success:true, message:`Pobrano klasy gruntu`, classes})
 });
 
 exports.updateGroundClass = withErrorHandling(async (req, res) => {
-    const {idGroundClass, groundClass, converter, taxDistrict, tax} = req.body;
+    const {idGroundClass, groundClass, tax, convertersData} = req.body;
     const [affectedRows] = await GroundClass.update({
         class:groundClass,
-        converter,
-        taxDistrict,
         tax
     }, {where:{id:idGroundClass}});
+    for(let i = 0;i<convertersData.length;i++) {
+        await Converter.update({
+            converter:convertersData[i]
+        }, {where:{taxDistrict:i + 1, idGroundClass}})
+    }
     res.status(200).json({success:true, message:"Klasa gruntu zaktualizowana", affectedRows})
 });
 
 exports.insertGroundClass = withErrorHandling(async (req, res) => {
-    const {groundClass, converter, taxDistrict, tax} = req.body;
-    await GroundClass.create({
+    const {groundClass, tax, convertersData} = req.body;
+    const groundClassObject = await GroundClass.create({
         class:groundClass,
-        converter,
-        taxDistrict,
         tax
-    })
+    });
+    for(let i = 0;i<convertersData.length;i++) {
+        await Converter.create({
+            idGroundClass:groundClassObject.id,
+            converter:convertersData[i]
+        })
+    }
     res.status(201).json({success:true, message:"wstawiono klasę gruntu"})
 });
 
