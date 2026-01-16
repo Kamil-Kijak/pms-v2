@@ -14,14 +14,6 @@ const GroundClass = sequelize.define("GroundClass", {
         type:DataTypes.STRING(10),
         allowNull:false
     },
-    converter:{
-        type:DataTypes.DECIMAL(3, 2),
-        allowNull:false
-    },
-    taxDistrict:{
-        type:DataTypes.INTEGER(),
-        allowNull:false
-    },
     tax:{
         type:DataTypes.ENUM("rolny", "lesny", "brak"),
         defaultValue:"brak"

@@ -37,14 +37,14 @@ exports.getTowns = withErrorHandling(async (req, res) => {
 });
 
 exports.getLocations = withErrorHandling(async (req, res) => {
-    const {taxDistrict, agriculturalTax, forestTax, commune, district, province, limit} = req.query
+    const {taxDistrict, agriculturalTax, forestTax, commune, district, province, limit} = req.query;
     const locations = await Location.findAll({
         where:{
             province:{
-                [Op.like]:`${province | ""}%`
+                [Op.like]:`${province || ""}%`
             },
             district:{
-                [Op.like]:`${district | ""}%`
+                [Op.like]:`${district || ""}%`
             },
             commune:{
                 [Op.like]:`${commune || ""}%`
@@ -62,5 +62,11 @@ exports.getLocations = withErrorHandling(async (req, res) => {
 exports.updateLocation = withErrorHandling(async (req, res) => {
     const {idLocation, taxDistrict, agriculturalTax, forestTax} = req.body;
     const [affectedRows] = await Location.update({taxDistrict, agriculturalTax, forestTax}, {where:{id:idLocation}});
+    res.status(200).json({success:true, message:"Zaktualizowano lokalizacje", affectedRows})
+});
+
+exports.updateAllLocations = withErrorHandling(async (req, res) => {
+    const {agriculturalTax, forestTax} = req.body;
+    const [affectedRows] = await Location.update({...(agriculturalTax && {agriculturalTax}), ...(forestTax && {forestTax})}, {where:{}});
     res.status(200).json({success:true, message:"Zaktualizowano lokalizacje", affectedRows})
 });
