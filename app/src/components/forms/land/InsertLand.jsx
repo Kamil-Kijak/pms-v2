@@ -209,8 +209,8 @@ const InsertLand = ({onClose = () => {}, reload = () => {}}) => {
                 <section className="my-4 gap-y-2 flex flex-col w-full">
                     <section className="flex gap-x-5 items-start w-full">
                         <Input
-                            placeholder="Podaj numer seryjny działki"
-                            title="Numer seryjny działki (opcjonalny)"
+                            placeholder="Podaj ID działki"
+                            title="Numer ID działki (opcjonalny)"
                             error={errors.serialNumber}
                             handleChange={(e) => setFieldData((prev) => ({...prev, serialNumber:e.target.value}))}
                             value={fieldData.serialNumber}

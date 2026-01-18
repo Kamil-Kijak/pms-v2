@@ -18,7 +18,7 @@ const Renter = ({data, number, onDelete, onUpdate, onRentDelete, onRentUpdate}) 
                     <section className="flex gap-x-2">
                         <h2 className="text-2xl font-bold">{data.name}</h2>
                         <h2 className="text-2xl font-bold">{data.phone.match(/.{3}/g).join(" ")}</h2>
-                        <p className="text-2xl">Umowy dzierżawy: {data.rents.length}</p>
+                        <p className="text-2xl ml-5 text-zinc-700 font-bold">Umowy dzierżawy: {data.rents.length}</p>
                     </section>
                 </section>
                 <section className="flex justify-around items-center gap-x-3">
@@ -48,7 +48,7 @@ const Renter = ({data, number, onDelete, onUpdate, onRentDelete, onRentUpdate}) 
                         data.rents.map((obj, index) =>
                         <section key={obj.id} className="flex flex-col gap-y-2 p-2 mb-5">
                             <section className="flex justify-between items-center w-full">
-                                <h1 className="text-xl"><strong>Numer seryjny działki: </strong>{data.serialNumber || "Brak numeru seryjnego działki"}</h1>
+                                <h1 className="text-xl"><strong>ID działki: </strong>{data.serialNumber || "Brak"}</h1>
                                 <section className="flex gap-x-3">
                                     <button className="edit-btn" onClick={() => {
                                             updateUpdateData({...obj, renter:{name:data.name, phone:data.phone}})

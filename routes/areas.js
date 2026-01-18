@@ -22,8 +22,6 @@ router.post("/insert", [
     body("area").trim().
     exists({checkFalsy:true}).withMessage("area is required").
     isFloat({min:0, max:9999}).withMessage("area must be a positive float value less than 10000").toFloat(),
-    body("releasedArea").trim().default(0).optional({checkFalsy:true}).
-    isFloat({min:0, max:9999}).withMessage("releasedArea must be float positive value less than 10000").toFloat()
 ], areaController.insertArea);
 
 router.post("/update", [
@@ -35,8 +33,6 @@ router.post("/update", [
     body("area").trim().
     exists({checkFalsy:true}).withMessage("area is required").
     isFloat({min:0, max:9999}).withMessage("area must be a positive float value less than 10000").toFloat(),
-    body("releasedArea").trim().default(0).optional({checkFalsy:true}).
-    isFloat({min:0, max:9999}).withMessage("releasedArea must be float positive value less than 10000").toFloat()
 ], areaController.updateArea);
 
 router.post("/delete", [

@@ -24,11 +24,6 @@ const LandArea = sequelize.define("LandArea", {
     area:{
         type:DataTypes.DECIMAL(8, 4),
         allowNull:false
-    },
-    releasedArea:{
-        type:DataTypes.DECIMAL(8, 4),
-        allowNull:false,
-        defaultValue:0
     }
 }, {
     tableName:"landAreas",

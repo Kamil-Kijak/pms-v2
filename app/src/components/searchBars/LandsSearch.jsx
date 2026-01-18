@@ -128,8 +128,8 @@ const LandsSearch = ({onClose = () => {}}) => {
     return (
         <SearchBarLayout onClose={onClose} isValidated={isValidated} onClear={() => setFieldData({})}>
             <Input
-                placeholder="Podaj numer seryjny"
-                title="Numer seryjny działki"
+                placeholder="Podaj ID działki"
+                title="Numer ID działki"
                 error={errors.serialFilter}
                 handleChange={(e) => setFieldData((prev) => ({...prev, serialFilter:e.target.value}))}
                 value={fieldData.serialFilter}
@@ -252,21 +252,21 @@ const LandsSearch = ({onClose = () => {}}) => {
             />
             <Input
                 type="date"
-                placeholder="Podaj datę sprzedaży od"
-                title="data sprzedaży od"
-                error={errors.lowSellDateFilter}
-                handleChange={(e) => setFieldData((prev) => ({...prev, lowSellDateFilter:e.target.value}))}
-                value={fieldData.lowSellDateFilter}
-                name="lowSellDateFilter"
-            />
-            <Input
-                type="date"
-                placeholder="Podaj datę sprzedaży do"
-                title="data sprzedaży do"
+                placeholder="Podaj datę sprzedaży po dniu"
+                title="data sprzedaży po dniu"
                 error={errors.highSellDateFilter}
                 handleChange={(e) => setFieldData((prev) => ({...prev, highSellDateFilter:e.target.value}))}
                 value={fieldData.highSellDateFilter}
                 name="highSellDateFilter"
+            />
+            <Input
+                type="date"
+                placeholder="Podaj datę sprzedaży do dnia"
+                title="data sprzedaży do dnia"
+                error={errors.lowSellDateFilter}
+                handleChange={(e) => setFieldData((prev) => ({...prev, lowSellDateFilter:e.target.value}))}
+                value={fieldData.lowSellDateFilter}
+                name="lowSellDateFilter"
             />
             <Input
                 type="number"

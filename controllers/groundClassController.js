@@ -21,7 +21,7 @@ exports.getUniqueGroundClasses = withErrorHandling(async (req, res) => {
 
 exports.getGroundClasses = withErrorHandling(async (req, res) => {
     const classes = await GroundClass.findAll({
-        attributes:["id", "class", "tax"],
+        attributes:["id", "class", "tax", "released"],
         include:{
             model:Converter,
             as:"converters",
@@ -33,10 +33,11 @@ exports.getGroundClasses = withErrorHandling(async (req, res) => {
 });
 
 exports.updateGroundClass = withErrorHandling(async (req, res) => {
-    const {idGroundClass, groundClass, tax, convertersData} = req.body;
+    const {idGroundClass, groundClass, tax, convertersData, released} = req.body;
     const [affectedRows] = await GroundClass.update({
         class:groundClass,
-        tax
+        tax,
+        released
     }, {where:{id:idGroundClass}});
     for(let i = 0;i<convertersData.length;i++) {
         await Converter.update({
@@ -47,10 +48,11 @@ exports.updateGroundClass = withErrorHandling(async (req, res) => {
 });
 
 exports.insertGroundClass = withErrorHandling(async (req, res) => {
-    const {groundClass, tax, convertersData} = req.body;
+    const {groundClass, tax, released, convertersData} = req.body;
     const groundClassObject = await GroundClass.create({
         class:groundClass,
-        tax
+        tax,
+        released
     });
     for(let i = 0;i<convertersData.length;i++) {
         await Converter.create({

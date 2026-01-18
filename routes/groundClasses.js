@@ -33,7 +33,9 @@ router.post("/insert", [
     isFloat({min:0, max:9}).withMessage("converter in convertersData must be a float positive value less than 10").toFloat(),
     body("tax").trim().
     exists({checkFalsy:true}).withMessage("tax is required").
-    isIn(["rolny", "lesny", "brak"]).withMessage("tax is not whitelisted")
+    isIn(["rolny", "lesny", "brak"]).withMessage("tax is not whitelisted"),
+    body("released").trim().exists({checkFalsy:true}).withMessage("released is required").
+    isBoolean().withMessage("released must be a boolean value").toBoolean()
 ], groundClassController.insertGroundClass);
 
 router.put("/update", [
@@ -49,7 +51,9 @@ router.put("/update", [
     isFloat({min:0, max:9}).withMessage("converter in convertersData must be a float positive value less than 10").toFloat(),
     body("tax").trim().
     exists({checkFalsy:true}).withMessage("tax is required").
-    isIn(["rolny", "lesny", "brak"]).withMessage("tax is not whitelisted")
+    isIn(["rolny", "lesny", "brak"]).withMessage("tax is not whitelisted"),
+    body("released").trim().exists({checkFalsy:true}).withMessage("released is required").
+    isBoolean().withMessage("released must be a boolean value").toBoolean()
 ], groundClassController.updateGroundClass);
 
 router.delete("/delete", [

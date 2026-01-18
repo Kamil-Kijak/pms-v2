@@ -18,7 +18,7 @@ const Land = ({data, number, onDelete, onUpdate, onShowFiles, onAddRent}) => {
             <section className="flex items-center justify-between">
                 <section className="flex gap-x-5 items-center">
                     <h1 className="font-bold text-2xl">#{number}</h1>
-                    <h1 className="text-xl">{data.serialNumber || "Brak numeru seryjnego działki"}</h1>
+                    <h1 className="text-xl">{data.serialNumber || "Brak ID działki"}</h1>
                     {
                         (data.sell.date || data.sell.price || data.sell.actNumber || data.sell.buyer) &&
                         <h1 className="text-2xl font-bold text-red-700">Sprzedana!</h1>

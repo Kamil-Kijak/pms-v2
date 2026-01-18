@@ -47,8 +47,8 @@ exports.getRenters = withErrorhandling(async (req, res) => {
             where:{
                 ...(monthFilter && {
                     issueRentalFactureDate:{
-                        [Op.gte]:new Date(new Date().getFullYear(), monthFilter - 1, 1),
-                        [Op.lte]:new Date(new Date().getFullYear(), monthFilter - 1, new Date(new Date().getFullYear(), monthFilter, 0).getDate())
+                        [Op.gte]:new Date(Date.UTC(2000, monthFilter - 1, 1)),
+                        [Op.lte]:new Date(Date.UTC(2000, monthFilter - 1, new Date(new Date().getFullYear(), monthFilter, 0).getDate()))
                     }
                 }),
                 ...((endYearFilter || showExpired != "true") && {
@@ -68,7 +68,6 @@ exports.getRenters = withErrorhandling(async (req, res) => {
         },
         order:[["name", "ASC"]]
     });
-    
     res.status(200).json({success:true, message:"pobrano dzierżawców i ich dzierżawy", renters});
 });
 

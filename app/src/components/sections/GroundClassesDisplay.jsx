@@ -52,9 +52,9 @@ const GroundClassesDisplay = () => {
                         <GroundClassesTable
                             onDelete={handleDelete}
                             onUpdate={() => setFormName("update")}
-                            title="Przeliczniki klas rolnych i związanych"
+                            title="klasy gruntów rolnych i związanych (pastwisk i łąk)"
                             data={groundClasses.filter((obj) => obj.tax == "rolny")}
-                            headHeaders={["Klasa", "I", "II", "III", "IV", "Operacje"]}
+                            headHeaders={["Klasa", "I", "II", "III", "IV", "Zwol. podatkowe", "Operacje"]}
                         />
                         <GroundClassesTable
                             onDelete={handleDelete}

@@ -17,6 +17,11 @@ const GroundClass = sequelize.define("GroundClass", {
     tax:{
         type:DataTypes.ENUM("rolny", "lesny", "brak"),
         defaultValue:"brak"
+    },
+    released:{
+        type:DataTypes.BOOLEAN(),
+        allowNull:false,
+        defaultValue:false,
     }
 }, {
     tableName:"groundClasses",

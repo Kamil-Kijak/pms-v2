@@ -29,6 +29,10 @@ const GroundClassesTable = ({title = "", data = [], headHeaders = [], onDelete, 
                                         <td className="border-2 p-5 min-w-20 min-h-20" key={index}>{obj.converter}</td>
                                     )
                                 }
+                                {
+                                    obj.tax == "rolny" &&
+                                    <td className="border-2 p-5 min-w-20 min-h-20">{obj.released ? "Tak" : "Nie"}</td>
+                                }
                                 <td className="p-5 min-w-20 min-h-20 flex gap-x-3 text-base">
                                     <button className="error-btn" onClick={() => updateDeleteConfirm(true, () => onDelete(obj.id))}><FontAwesomeIcon icon={faTrashCan}/> Usuń</button>
                                     <button className="edit-btn" onClick={() => {

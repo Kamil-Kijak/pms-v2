@@ -54,17 +54,24 @@ const UpdateGroundClass = ({onClose = () => {}, reload = () => {}}) => {
             regexp:/^(rolny|lesny|brak)$/,
             errorText:"Nie poprawny"
         },
+        {
+            name:"released",
+            allowNull:false,
+            regexp:/^(true|false)$/,
+            errorText:"Nie poprawny",
+        },
     ]);
 
     useEffect(() => {
-        console.log(groundClassData)
+        console.log(groundClassData.released)
         setFieldData({
             groundClass:groundClassData.class,
             tax:groundClassData.tax,
+            released:`${groundClassData.released}`,
             converter1:`${groundClassData.converters[0].converter}`,
             converter2:`${groundClassData.converters[1].converter}`,
             converter3:`${groundClassData.converters[2].converter}`,
-            converter4:`${groundClassData.converters[3].converter}`
+            converter4:`${groundClassData.converters[3].converter}`,
         });
     }, []);
 
@@ -94,6 +101,7 @@ const UpdateGroundClass = ({onClose = () => {}, reload = () => {}}) => {
                 groundClass:fieldData.groundClass,
                 tax:fieldData.tax,
                 convertersData:converters,
+                released:fieldData.released,
                 idGroundClass:groundClassData.id
             })
             onClose();
@@ -147,6 +155,16 @@ const UpdateGroundClass = ({onClose = () => {}, reload = () => {}}) => {
 
                 {
                     fieldData.tax == "rolny" && <>
+                        <Select
+                            title="Zwolniona z podatku"
+                            error={errors.released}
+                            value={fieldData.released}
+                            options={<>
+                                <option value="true">Tak</option>
+                                <option value="false">Nie</option>
+                            </>}
+                            handleChange={(e) => setFieldData((prev) => ({...prev, released:e.target.value}))}
+                        />
                         <Input
                             type="number"
                             min="0"

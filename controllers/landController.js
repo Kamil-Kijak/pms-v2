@@ -182,10 +182,10 @@ exports.getLands = withErrorHandling(async (req, res) => {
                 attributes:["date", "price", "buyer", "actNumber"],
                 required:lowSellDateFilter || highSellDateFilter,
                 where:{
-                    ...((lowSellDateFilter || highAreaFilter) && {
+                    ...((lowSellDateFilter || highSellDateFilter) && {
                         date:{
-                            ...(lowSellDateFilter && {[Op.gte]:lowSellDateFilter}),
-                            ...(highSellDateFilter && {[Op.lte]:highSellDateFilter}),   
+                            ...(lowSellDateFilter && {[Op.lte]:new Date(lowSellDateFilter)}),
+                            ...(highSellDateFilter && {[Op.gte]:new Date(highSellDateFilter)}),   
                         }
                     })
                 }
@@ -260,12 +260,12 @@ exports.getLands = withErrorHandling(async (req, res) => {
             {
                 model:LandArea,
                 as:"areas",
-                attributes:["id", "area", "releasedArea"],
+                attributes:["id", "area"],
                 required:groundClassFilter,
                 include:{
                     model:GroundClass,
                     as:"groundClass",
-                    attributes:["id", "class", "tax"],
+                    attributes:["id", "class", "tax", "released"],
                     include:{
                         attributes:["converter"],
                         model:Converter,

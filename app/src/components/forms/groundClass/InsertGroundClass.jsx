@@ -52,6 +52,13 @@ const InsertGroundClass = ({onClose = () => {}, reload = () => {}}) => {
             regexp:/^(rolny|lesny|brak)$/,
             errorText:"Nie poprawny"
         },
+        {
+            name:"released",
+            allowNull:false,
+            regexp:/^(true|false)$/,
+            errorText:"Nie poprawny",
+            default:"false"
+        },
     ]);
 
     const handleSubmit = (e) => {
@@ -67,6 +74,7 @@ const InsertGroundClass = ({onClose = () => {}, reload = () => {}}) => {
             await post("/api/ground-classes/insert", {
                 groundClass:fieldData.groundClass,
                 tax:fieldData.tax,
+                released:fieldData.released,
                 convertersData:converters
             })
             onClose();
@@ -85,7 +93,13 @@ const InsertGroundClass = ({onClose = () => {}, reload = () => {}}) => {
                 converter1:"1",
                 converter2:"1",
                 converter3:"1",
-                converter4:"1"
+                converter4:"1",
+                released:fieldData.tax == "lesny" ? "false" : "true"
+            }))
+        } else {
+            setFieldData((prev) => ({
+                ...prev,
+                released:"false"
             }))
         }
     }, [fieldData.tax])
@@ -120,7 +134,6 @@ const InsertGroundClass = ({onClose = () => {}, reload = () => {}}) => {
                     value={fieldData.tax}
                     handleChange={(e) => setFieldData((prev) => ({...prev, tax:e.target.value}))}
                 />
-
                 <Input
                     title="Nazwa klasy"
                     placeholder="Podaj nazwe klasy"
@@ -128,9 +141,19 @@ const InsertGroundClass = ({onClose = () => {}, reload = () => {}}) => {
                     value={fieldData.groundClass}
                     handleChange={(e) => setFieldData((prev) => ({...prev, groundClass:e.target.value}))}
                 />
-
                 {
                     fieldData.tax == "rolny" && <>
+                        <Select
+                            title="Zwolniona z podatku"
+                            error={errors.released}
+                            value={fieldData.released}
+                            options={<>
+                                <option value="true">Tak</option>
+                                <option value="false">Nie</option>
+                            </>}
+                            defaultOption="false"
+                            handleChange={(e) => setFieldData((prev) => ({...prev, released:e.target.value}))}
+                        />
                         <Input
                             type="number"
                             min="0"
