@@ -12,7 +12,8 @@ const GroundClass = sequelize.define("GroundClass", {
     },
     class:{
         type:DataTypes.STRING(10),
-        allowNull:false
+        allowNull:false,
+        unique:true
     },
     tax:{
         type:DataTypes.ENUM("rolny", "lesny", "brak"),

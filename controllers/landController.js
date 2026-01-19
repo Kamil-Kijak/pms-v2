@@ -162,7 +162,7 @@ exports.getLands = withErrorHandling(async (req, res) => {
                 include:{
                     model:Location,
                     as:"location",
-                    attributes:["province", "district", "commune", "agriculturalTax", "forestTax"],
+                    attributes:["province", "district", "commune", "agriculturalTax", "forestTax", "taxDistrict"],
                     where:{
                         commune:{
                             [Op.like]:`${communeFilter || ""}%`
@@ -267,7 +267,7 @@ exports.getLands = withErrorHandling(async (req, res) => {
                     as:"groundClass",
                     attributes:["id", "class", "tax", "released"],
                     include:{
-                        attributes:["converter"],
+                        attributes:["converter", "taxDistrict"],
                         model:Converter,
                         as:"converters"
                     },

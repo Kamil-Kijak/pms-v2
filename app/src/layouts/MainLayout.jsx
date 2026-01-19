@@ -1,3 +1,5 @@
+import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 
 const MainLayout = ({children}) => {
@@ -12,8 +14,9 @@ const MainLayout = ({children}) => {
             <main className="flex flex-col justify-center items-center">
                 {children}
             </main>
-            <footer className="bg-green-700 flex p-2 items-center gap-5 justify-center">
-                <h1 className="text-3xl font-extrabold text-white">&copy; Kamil Kijak 2026</h1>
+            <footer className="bg-green-700 flex p-2 items-center gap-5 justify-around">
+                <p className="text-2xl font-extrabold text-white">&copy; Kamil Kijak 2026</p>
+                <p className="text-2xl font-extrabold text-white"><FontAwesomeIcon icon={faEnvelope}/>kamil.kijak@pixlesofte.com</p>
             </footer>
         </section>  
     )

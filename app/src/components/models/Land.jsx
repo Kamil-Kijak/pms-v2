@@ -18,7 +18,7 @@ const Land = ({data, number, onDelete, onUpdate, onShowFiles, onAddRent}) => {
             <section className="flex items-center justify-between">
                 <section className="flex gap-x-5 items-center">
                     <h1 className="font-bold text-2xl">#{number}</h1>
-                    <h1 className="text-xl">{data.serialNumber || "Brak ID działki"}</h1>
+                    <h1 className="text-xl"><strong>ID:</strong> {data.serialNumber || "Brak"}</h1>
                     {
                         (data.sell.date || data.sell.price || data.sell.actNumber || data.sell.buyer) &&
                         <h1 className="text-2xl font-bold text-red-700">Sprzedana!</h1>
@@ -195,6 +195,19 @@ const Land = ({data, number, onDelete, onUpdate, onShowFiles, onAddRent}) => {
                             </section>
                         </section>
                     }
+                    <section className="flex flex-col gap-x-5 items-center justify-center">
+                        {
+                            data.areas.length ?
+                                <>
+                                    <h1 className="font-bold text-zinc-600 text-2xl self-center">Klasy gruntu</h1>
+                                    <section className="flex flex-col gap-x-5 items-start justify-center">
+                                        
+                                    </section>
+                                </>
+                            :
+                            <h1 className="font-bold text-zinc-600 text-2xl self-center">Brak podziału na klasy gruntu</h1>
+                        }
+                    </section>
                 </>
             }
         </section>

@@ -48,7 +48,7 @@ const Renter = ({data, number, onDelete, onUpdate, onRentDelete, onRentUpdate}) 
                         data.rents.map((obj, index) =>
                         <section key={obj.id} className="flex flex-col gap-y-2 p-2 mb-5">
                             <section className="flex justify-between items-center w-full">
-                                <h1 className="text-xl"><strong>ID działki: </strong>{data.serialNumber || "Brak"}</h1>
+                                <h1 className="text-xl"><strong>ID działki: </strong>{obj.land.serialNumber || "Brak"}</h1>
                                 <section className="flex gap-x-3">
                                     <button className="edit-btn" onClick={() => {
                                             updateUpdateData({...obj, renter:{name:data.name, phone:data.phone}})
