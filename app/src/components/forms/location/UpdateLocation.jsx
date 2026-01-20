@@ -43,7 +43,11 @@ const UpdateLocation = ({onClose = () => {}, reload = () => {}}) => {
     const handleSubmit = (e) => {
         e.preventDefault();
         if(isValidated()) {
-            put("/api/locations/update", {idLocation:locationData.id, ...fieldData}, (res) => {
+            put("/api/locations/update", {idLocation:locationData.id,
+                taxDistrict:fieldData.taxDistrict,
+                agriculturalTax:fieldData.agriculturalTax || null,
+                forestTax:fieldData.forestTax || null
+                }, (res) => {
                 onClose()
                 reload()
             });

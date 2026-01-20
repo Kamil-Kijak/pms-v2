@@ -4,6 +4,7 @@ import { useDeleteConfirmStore, useUpdateDataStore } from "../../hooks/stores";
 import { useState } from "react";
 import RoleRequired from "../nav/RoleRequired";
 import {DateTime} from "luxon"
+import Area from "./Area";
 
 
 const Land = ({data, number, onDelete, onUpdate, onShowFiles, onAddRent}) => {
@@ -200,8 +201,42 @@ const Land = ({data, number, onDelete, onUpdate, onShowFiles, onAddRent}) => {
                             data.areas.length ?
                                 <>
                                     <h1 className="font-bold text-zinc-600 text-2xl self-center">Klasy gruntu</h1>
-                                    <section className="flex flex-col gap-x-5 items-start justify-center">
-                                        
+                                    <section className="flex gap-x-5 w-full justify-around mt-3 text-xl"> 
+                                        {
+                                            data.areas.reduce((acc, value) => value.area + acc, 0) - data.area == 0 ?
+                                            <h1 className="font-bold text-green-700 text-center">Zgodność powierzchni</h1>
+                                            :
+                                            <h1 className="font-bold text-red-800 text-center">Różnica(ha): {data.areas.reduce((acc, value) => value.area + acc, 0) - data.area}</h1>
+                                        }
+                                        {
+                                            data.town.location.taxDistrict ?
+                                            <h1 className="font-bold text-green-700 text-center">Okręg podatkowy: {["I", "II", "III", "IV"][data.town.location.taxDistrict - 1]}</h1>
+                                            :
+                                            <h1 className="font-bold text-red-800 text-center">Brak okręgu podatkowego</h1>
+                                        }
+                                        {
+                                            data.town.location.agriculturalTax ?
+                                            <h1 className="font-bold text-green-700 text-center">Staw. podatku roln.: {data.town.location.agriculturalTax}zł/ha przel.</h1>
+                                            :
+                                            <h1 className="font-bold text-red-800 text-center">Brak podatku roln.</h1>
+                                        }
+                                        {
+                                            data.town.location.forestTax ?
+                                            <h1 className="font-bold text-green-700 text-center">Staw. podatku leśn.: {data.town.location.forestTax}zł/ha</h1>
+                                            :
+                                            <h1 className="font-bold text-red-800 text-center">Brak podatku leśn.</h1>
+                                        }
+                                    </section>
+                                    <section className="flex flex-col gap-x-5 items-start justify-center m-3 w-full">
+                                        {
+                                            data.areas.map((obj, index) => <Area key={obj.id}
+                                                data={obj}
+                                                number={index + 1}
+                                                taxDistrict={data.town.location.taxDistrict || null}
+                                                forestTax={data.town.location.forestTax || null}
+                                                agriculturalTax={data.town.location.agriculturalTax || null}
+                                            />)
+                                        }
                                     </section>
                                 </>
                             :

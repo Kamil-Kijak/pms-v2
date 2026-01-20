@@ -474,7 +474,6 @@ const InsertLand = ({onClose = () => {}, reload = () => {}}) => {
                             <h2 className="text-center m-3 text-2xl font-bold text-green-700">Powierzchnie zgodne</h2>
                             )
                         }
-                        <h1></h1>
                         <section className="flex items-start w-full justify-between gap-x-5 my-5">
                             <section className="w-full flex flex-col gap-y-2">
                                     {
