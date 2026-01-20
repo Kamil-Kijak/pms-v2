@@ -29,12 +29,12 @@ const useLocations = (selectedProvince, selectedDistrict, selectedCommune, selec
     useEffect(() => {
         if(selectedTown && selectedTown.length > 2) {
             const params = new URLSearchParams({
-                town:selectedTown,
-                commune:selectedCommune,
-                district:selectedDistrict,
-                province:selectedProvince
+                town:selectedTown != undefined ? selectedTown : "",
+                commune:selectedCommune != undefined ? selectedCommune : "",
+                district:selectedDistrict != undefined ? selectedDistrict : "",
+                province:selectedProvince != undefined ? selectedProvince : ""
             })
-            get(`/api/locations/get-towns?${params.toString()}`, (res) => setTowns(res.data.towns))
+            get(`/api/locations/get-towns?${params.toString()}`, (res) => {setTowns(res.data.towns);console.log(params)})
         }
     }, [selectedTown, selectedProvince, selectedDistrict, selectedCommune])
 

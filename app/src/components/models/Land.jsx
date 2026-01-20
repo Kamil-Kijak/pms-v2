@@ -26,7 +26,7 @@ const Land = ({data, number, onDelete, onUpdate, onShowFiles, onAddRent}) => {
                 </section>
                 <section className="flex gap-x-3 items-center">
                     {
-                        (!data.rent && data.landPurpose.type == "Dzierżawa") &&
+                        (!data.rent && data.landPurpose && data.landPurpose.type == "Dzierżawa") &&
                         <button className="primary-btn" onClick={() => {
                             updateUpdateData({id:data.id, number})
                             onAddRent()

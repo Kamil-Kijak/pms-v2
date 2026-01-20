@@ -383,7 +383,7 @@ exports.insertLand = withErrorHandling(async (req, res) => {
         price:purchasePrice || null,
         seller:seller || null
     });
-    res.status(201).json({success:true, message:"Dodano działkę"})
+    res.status(201).json({success:true, message:"Dodano działkę", insertId:createdLand.id})
 });
 
 exports.updateLand = withErrorHandling(async (req, res) => {

@@ -12,7 +12,7 @@ const useApi = () => {
             if(err.status < 500) {
                 onClientError(err.response.data);
             } else {
-                onServerError ? onServerError(err) : updateError(null);
+                onServerError ? onServerError(err) : updateError(err.message);
             }
         }
     }
@@ -24,7 +24,7 @@ const useApi = () => {
             if(err.status < 500) {
                 onClientError(err.response.data);
             } else {
-                onServerError ? onServerError(err) : updateError(null);
+                onServerError ? onServerError(err) : updateError(err.message);
             }
         }
     }
@@ -36,7 +36,7 @@ const useApi = () => {
             if(err.status < 500) {
                 onClientError(err.response.data);
             } else {
-                onServerError ? onServerError(err) : updateError(null);
+                onServerError ? onServerError(err) : updateError(err.message);
             }
         }
     }
@@ -48,7 +48,7 @@ const useApi = () => {
             if(err.status < 500) {
                 onClientError(err.response.data);
             } else {
-                onServerError ? onServerError(err) : updateError(null);
+                onServerError ? onServerError(err) : updateError(err.message);
             }
         }
     }

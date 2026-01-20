@@ -10,7 +10,7 @@ const useFormFields = (fields) => {
             if(obj.allowNull) {
                 newFieldData[obj.name] = "";
             }
-            if(obj.defaultValue) {
+            if(obj.defaultValue != undefined) {
                 newFieldData[obj.name] = obj.defaultValue;
             }
         });

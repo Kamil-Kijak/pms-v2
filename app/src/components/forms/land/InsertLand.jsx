@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import useFormFields from "../../../hooks/useFormFields"
 import Input from "../../inputs/Input"
 import useApi from "../../../hooks/useApi";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import ErrorBox from "../../popups/ErrorBox"
 import TipInput from "../../inputs/TipInput";
 import TipSelect from "../../inputs/TipSelect";
@@ -13,6 +13,7 @@ import InsertOwner from "../owner/InsertOwner";
 import InsertArea from "../area/InsertArea"
 import Select from "../../inputs/Select";
 import TextArea from "../../inputs/TextArea";
+import RoleRequired from "../../nav/RoleRequired";
 
 
 const InsertLand = ({onClose = () => {}, reload = () => {}}) => {
@@ -178,6 +179,10 @@ const InsertLand = ({onClose = () => {}, reload = () => {}}) => {
     const [insertionData, setInsertionData] = useState({});
     const [landAreas, setLandAreas] = useState([]);
 
+    const areaFromLandAreas = useMemo(() => {
+        return Number(fieldData.area) - landAreas.reduce((acc, value) => acc + Number(value.area), 0)
+    }, [fieldData.area, landAreas])
+
     useEffect(() => {
         get("/api/lands/get-insertion-data", (res) => setInsertionData((prev) => ({...prev, ...res.data.data})));
         get("/api/ground-classes/get", (res) => setInsertionData((prev) => ({...prev, groundClasses:res.data.classes})))
@@ -194,13 +199,22 @@ const InsertLand = ({onClose = () => {}, reload = () => {}}) => {
     }, [fieldData.serialNumber])
 
     const handleSubmit = (e) => {
-        e.preventDefault();
-        if(isValidated()) {
-            post("/api/lands/insert", {...fieldData}, (res) => {
-                onClose()
-                reload()
-            });
+        const insertion = async () => {
+            if(isValidated()) {
+                await post("/api/lands/insert", {...fieldData}, async (res) => {
+                    const idLand = res.data.insertId;
+                    for(let i = 0;i<landAreas.length;i++) {
+                        await post("/api/areas/insert", {
+                            idLand, area:landAreas[i].area, idGroundClass:landAreas[i].idGroundClass
+                        });
+                    }
+                    onClose()
+                    reload();
+                });
+            }
         }
+        e.preventDefault();
+        insertion()
     }
 
     const handleTownChange = (value) => {
@@ -451,28 +465,38 @@ const InsertLand = ({onClose = () => {}, reload = () => {}}) => {
                             value={fieldData.sellPrice}
                         /> 
                     </section>
-                    <h1 className="text-center m-3 text-2xl font-bold">Dane podziału na klasy gruntów</h1>
-                    <section className="flex items-start w-full justify-between gap-x-5 my-5">
-                        <section className="w-full flex flex-col gap-y-2">
-                                {
-                                    landAreas.map((obj, index) => <section key={index} className="flex justify-between gap-x-3 p-3 border-2 items-center">
-                                        <section className="flex gap-x-3">
-                                            <p>#{index + 1}</p>
-                                            <p className="font-bold">{insertionData.groundClasses.find((value) => value.id == obj.idGroundClass).class}</p>
-                                            <p>{Number(obj.area).toFixed(4)}ha</p>
-                                        </section>
-                                        <section className="flex gap-x-3">
-                                            <button className="error-btn"><FontAwesomeIcon icon={faXmark}/></button>
-                                        </section>
-                                    </section>)
-                                }
+                    <RoleRequired roles={["KSIEGOWOSC", "SEKRETARIAT"]}>
+                        <h1 className="text-center m-3 text-2xl font-bold">Dane podziału na klasy gruntów</h1>
+                        {
+                            fieldData.area && (areaFromLandAreas ?
+                            <h2 className="text-center m-3 text-2xl font-bold text-red-800">Różnica (ha): {areaFromLandAreas.toFixed(4)}</h2>
+                            :
+                            <h2 className="text-center m-3 text-2xl font-bold text-green-700">Powierzchnie zgodne</h2>
+                            )
+                        }
+                        <h1></h1>
+                        <section className="flex items-start w-full justify-between gap-x-5 my-5">
+                            <section className="w-full flex flex-col gap-y-2">
+                                    {
+                                        landAreas.map((obj, index) => <section key={index} className="flex justify-between gap-x-3 p-3 border-2 items-center text-xl">
+                                            <section className="flex gap-x-3">
+                                                <p>#{index + 1}</p>
+                                                <p className="font-bold">{insertionData.groundClasses.find((value) => value.id == obj.idGroundClass).class}</p>
+                                                <p>{Number(obj.area).toFixed(4)}ha</p>
+                                            </section>
+                                            <section className="flex gap-x-3">
+                                                <button className="error-btn" onClick={() => setLandAreas((prev) => prev.filter((value) => value.idGroundClass != obj.idGroundClass))}><FontAwesomeIcon icon={faXmark}/></button>
+                                            </section>
+                                        </section>)
+                                    }
+                            </section>
+                            <section className="w-full">
+                                <InsertArea groundClasses={insertionData.groundClasses} onInsert={(area) => {
+                                        setLandAreas((prev) => [...prev, area])
+                                    }}/>
+                            </section>
                         </section>
-                        <section className="w-full">
-                            <InsertArea groundClasses={insertionData.groundClasses} onInsert={(area) => {
-                                    setLandAreas((prev) => [...prev, area])
-                                }}/>
-                        </section>
-                    </section>
+                    </RoleRequired>
                 </section>
                 <button type="submit" className="primary-btn"><FontAwesomeIcon icon={faPlus}/> Dodaj</button>
             </form>
