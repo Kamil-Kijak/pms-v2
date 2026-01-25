@@ -34,7 +34,7 @@ const useLocations = (selectedProvince, selectedDistrict, selectedCommune, selec
                 district:selectedDistrict != undefined ? selectedDistrict : "",
                 province:selectedProvince != undefined ? selectedProvince : ""
             })
-            get(`/api/locations/get-towns?${params.toString()}`, (res) => {setTowns(res.data.towns);console.log(params)})
+            get(`/api/locations/get-towns?${params.toString()}`, (res) => setTowns(res.data.towns))
         }
     }, [selectedTown, selectedProvince, selectedDistrict, selectedCommune])
 

@@ -1,10 +1,10 @@
-import { faPlus, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { faArrowRotateLeft, faPen, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import useFormFields from "../../../hooks/useFormFields"
 import Input from "../../inputs/Input"
 import useApi from "../../../hooks/useApi";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import ErrorBox from "../../popups/ErrorBox"
 import TipInput from "../../inputs/TipInput";
 import TipSelect from "../../inputs/TipSelect";
@@ -15,10 +15,12 @@ import TextArea from "../../inputs/TextArea";
 import { useUpdateDataStore } from "../../../hooks/stores";
 import {DateTime} from "luxon"
 import Form from "../../inputs/Form"
+import RoleRequired from "../../nav/RoleRequired";
+import InsertArea from "../area/InsertArea";
 
 const UpdateLand = ({onClose = () => {}, reload = () => {}}) => {
 
-    const {get, put} = useApi();
+    const {get, put, deleteReq, post} = useApi();
     const landData = useUpdateDataStore((state) => state.data);
 
     const [setFieldData, fieldData, errors, setErrors, isValidated] = useFormFields([
@@ -177,11 +179,21 @@ const UpdateLand = ({onClose = () => {}, reload = () => {}}) => {
         fieldData.town,
     );
 
+    const [landAreas, setLandAreas] = useState([]);
+    const [landAreasToDelete, setLandAreasToDelete] = useState([]);
+    const [landAreasToInsert, setLandAreasToInsert] = useState([]);
+    
+    const areaFromLandAreas = useMemo(() => {
+        return Number(fieldData.area) - [...landAreas.filter((obj) => !landAreasToDelete.some((value) => value.id == obj.id)), ...landAreasToInsert].reduce((acc, value) => acc + Number(value.area), 0)
+    }, [fieldData.area, landAreas, landAreasToDelete, landAreasToInsert])
+
     const [insertionData, setInsertionData] = useState({});
+
 
     useEffect(() => {
         const func = async () => {
-            await get("/api/lands/get-insertion-data", (res) => setInsertionData(res.data.data));
+            await get("/api/lands/get-insertion-data", (res) => setInsertionData((prev) => ({...prev, ...res.data.data})));
+            await get("/api/ground-classes/get", (res) => setInsertionData((prev) => ({...prev, groundClasses:res.data.classes})))
             // getting data from landData
             setFieldData({
                 landNumber:landData.landNumber,
@@ -210,6 +222,7 @@ const UpdateLand = ({onClose = () => {}, reload = () => {}}) => {
                 buyer:landData.purchase.buyer,
                 sellPrice:landData.sell.price
             });
+            setLandAreas(landData.areas.map((obj) => ({id:obj.id, area:obj.area, idGroundClass:obj.groundClass.id})))
         }
         func()
     }, [landData]);
@@ -226,7 +239,13 @@ const UpdateLand = ({onClose = () => {}, reload = () => {}}) => {
 
     const handleSubmit = (e) => {
         if(isValidated()) {
-            put("/api/lands/update", {...fieldData, idLand:landData.id}, (res) => {
+            put("/api/lands/update", {...fieldData, idLand:landData.id}, async (res) => {
+                for(let i = 0;i<landAreasToDelete.length;i++) {
+                    await deleteReq("/api/areas/delete", {idArea:landAreasToDelete[i].id});
+                }
+                for(let i = 0;i<landAreasToInsert.length;i++) {
+                    await post("/api/areas/insert", {idLand:landData.id, idGroundClass:landAreasToInsert[i].idGroundClass, area:landAreasToInsert[i].area});
+                }
                 onClose()
                 reload()
             });
@@ -481,7 +500,57 @@ const UpdateLand = ({onClose = () => {}, reload = () => {}}) => {
                         /> 
                     </section>
                 </section>
-                <button type="submit" className="primary-btn"><FontAwesomeIcon icon={faPlus}/> zapisz zmiany</button>
+                <RoleRequired roles={["KSIEGOWOSC", "SEKRETARIAT"]}>
+                    <h1 className="text-center m-3 text-2xl font-bold">Dane podziału na klasy gruntów</h1>
+                    {
+                        fieldData.area && (areaFromLandAreas ?
+                        <h2 className="text-center m-3 text-2xl font-bold text-red-800">Różnica (ha): {areaFromLandAreas.toFixed(4)}</h2>
+                        :
+                        <h2 className="text-center m-3 text-2xl font-bold text-green-700">Powierzchnie zgodne</h2>
+                        )
+                    }
+                    {
+                        (landAreasToInsert.length > 0 || landAreasToDelete.length > 0) &&
+                        <button className="primary-btn" onClick={() => {
+                            setLandAreasToDelete([]);
+                            setLandAreasToInsert([]);
+                        }}><FontAwesomeIcon icon={faArrowRotateLeft}/> Cofnij zmiany</button>
+                    }
+                    <section className="flex items-start w-full justify-between gap-x-5 my-5">
+                            <section className="w-full flex flex-col gap-y-2">
+                                    {
+                                        [...landAreas.filter((obj) => !landAreasToDelete.some((value) => value.id == obj.id))].map((obj, index) => <section key={index} className="flex justify-between gap-x-3 p-3 border-2 items-center text-xl">
+                                            <section className="flex gap-x-3">
+                                                <p>#{index + 1}</p>
+                                                <p className="font-bold">{insertionData.groundClasses.find((value) => value.id == obj.idGroundClass).class}</p>
+                                                <p>{Number(obj.area).toFixed(4)}ha</p>
+                                            </section>
+                                            <section className="flex gap-x-3">
+                                                <button className="error-btn" onClick={() => setLandAreasToDelete((prev) => [...prev, obj])}><FontAwesomeIcon icon={faXmark}/></button>
+                                            </section>
+                                        </section>)
+                                    }
+                                    {
+                                        [...landAreasToInsert].map((obj, index) => <section key={index} className="flex justify-between gap-x-3 p-3 border-2 items-center text-xl">
+                                            <section className="flex gap-x-3">
+                                                <p>#{index + 1}</p>
+                                                <p className="font-bold">{insertionData.groundClasses.find((value) => value.id == obj.idGroundClass).class}</p>
+                                                <p>{Number(obj.area).toFixed(4)}ha</p>
+                                            </section>
+                                            <section className="flex gap-x-3">
+                                                <button className="error-btn" onClick={() => setLandAreasToInsert((prev) => prev.filter((value) => value.idGroundClass != obj.idGroundClass))}><FontAwesomeIcon icon={faXmark}/></button>
+                                            </section>
+                                        </section>)
+                                    }
+                            </section>
+                            <section className="w-full">
+                                <InsertArea groundClasses={insertionData.groundClasses} areas={[...landAreasToInsert, ...landAreas.filter((obj) => !landAreasToDelete.some((value) => value.id == obj.id))]} onInsert={(area) => {
+                                        setLandAreasToInsert((prev) => [...prev, area])
+                                    }}/>
+                            </section>
+                        </section>
+                </RoleRequired>
+                <button type="submit" className="primary-btn"><FontAwesomeIcon icon={faPen}/> Zapisz zmiany</button>
             </Form>
         </section>
     )

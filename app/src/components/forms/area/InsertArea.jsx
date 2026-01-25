@@ -6,7 +6,7 @@ import TipSelect from "../../inputs/TipSelect";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 
 
-const InsertArea = ({onInsert = (area) => {}, groundClasses = []}) => {
+const InsertArea = ({onInsert = (area) => {}, groundClasses = [], areas = []}) => {
 
      const [setFieldData, fieldData, errors, setErrors, isValidated] = useFormFields([
         {
@@ -24,10 +24,12 @@ const InsertArea = ({onInsert = (area) => {}, groundClasses = []}) => {
     ]);
 
     const handleSubmit = () => {
-        if(isValidated()) {
-            onInsert({...fieldData});
-            setFieldData({});
-            setErrors({});
+        if(!areas.some((obj) => obj.idGroundClass == fieldData.idGroundClass)) {
+            if(isValidated()) {
+                onInsert({...fieldData});
+                setFieldData({});
+                setErrors({});
+            }
         }
     }
 

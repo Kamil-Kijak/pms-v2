@@ -1,5 +1,5 @@
 
-import { useMemo } from "react";
+import { useMemo} from "react";
 import SummarizeLayout from "../../layouts/SummarizeLayout"
 import calculateAreaData from "../../functions/calculateAreaData";
 
@@ -11,21 +11,27 @@ const LandsSummarize = ({onClose = () => {}, lands = []}) => {
 
     const calculateCalculateArea = (area, land) => {
         const location = land.town.location;
-        if(!location.taxDistrict) return 0;
+        if(!location.taxDistrict) {
+            return 0;
+        }
         const {calculateArea} = calculateAreaData(area, land.town.location.taxDistrict, 0, 0)
         return Number(calculateArea);
     }
 
     const calculateAgriculturalTax = (area, land) => {
         const location = land.town.location;
-        if(!location.taxDistrict || !location.agriculturalTax) return 0;
+        if(!location.taxDistrict || !location.agriculturalTax){
+            return 0;
+        }
         const {tax} = calculateAreaData(area, land.town.location.taxDistrict, location.agriculturalTax, 0)
         return Number(tax);
     }
 
     const calculateForestTax = (area, land) => {
         const location = land.town.location;
-        if(!location.forestTax) return 0;
+        if(!location.forestTax) {
+            return 0;
+        }
         const {tax} = calculateAreaData(area, null, 0, location.forestTax)
         return Number(tax);
     }

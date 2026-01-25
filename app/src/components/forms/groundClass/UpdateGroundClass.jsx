@@ -4,7 +4,7 @@ import useApi from "../../../hooks/useApi";
 import useFormFields from "../../../hooks/useFormFields";
 import Input from "../../inputs/Input";
 import Select from "../../inputs/Select";
-import { faPlus, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { faPen, faPlus, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { useEffect } from "react";
 import Form from "../../inputs/Form"
 
@@ -205,7 +205,7 @@ const UpdateGroundClass = ({onClose = () => {}, reload = () => {}}) => {
                     </>
                 }
             </section>
-            <button type="submit" className="primary-btn"><FontAwesomeIcon icon={faPlus}/> Dodaj</button>
+            <button type="submit" className="primary-btn"><FontAwesomeIcon icon={faPen}/> Zapisz zmiany</button>
         </Form>
     )
 }
