@@ -39,7 +39,7 @@ router.put("/update", [
 
 router.delete("/delete", [
     body("areasIds").exists({checkFalsy:true}).withMessage("areasIds is required").isArray().withMessage("areasIds must be an array"),
-    body("areasIds.*.id").trim().exists({checkFalsy:true}).withMessage("areasIds.*.id is required")
+    body("areasIds.*").trim().exists({checkFalsy:true}).withMessage("areasIds.* is required")
 ], areaController.deleteAreas);
 
 module.exports = router;
