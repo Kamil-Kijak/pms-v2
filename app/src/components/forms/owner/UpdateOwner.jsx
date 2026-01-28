@@ -48,8 +48,8 @@ const UpdateOwner = ({onClose = () => {}, reload = () => {}}) => {
             <h2 className="text-2xl font-bold">Nr {ownerData.number}</h2>
             <section className="my-4 gap-y-2 flex flex-col w-[80%]">
                 <Input
-                    placeholder="Podaj imie"
-                    title="Imie"
+                    placeholder="Podaj imie/nazwisko"
+                    title="Imie/nazwisko"
                     error={errors.name}
                     handleChange={(e) => setFieldData((prev) => ({...prev, name:e.target.value}))}
                     value={fieldData.name}
